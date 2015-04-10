@@ -1,0 +1,1 @@
+CREATE DATABASE training_chef;
