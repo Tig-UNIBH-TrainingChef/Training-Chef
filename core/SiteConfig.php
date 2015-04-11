@@ -43,13 +43,17 @@ class SiteConfig
             'desc' => 'Sobre o projeto'
         ),
         array(
+            'href' => 'acompanhamento.php',
+            'desc' => 'Progresso de construção'
+        ),/*
+        array(
             'href' => 'cadastrar.php',
             'desc' => 'Cadastrar'
         ),
         array(
             'href' => 'logar.php',
             'desc' => 'Acessar'
-        )
+        )*/
     );
     
     /**

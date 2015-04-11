@@ -13,6 +13,7 @@
     <link href="view/css/prettyPhoto.css" rel="stylesheet">
     <link href="view/css/main.css" rel="stylesheet">
     <link href="view/css/responsive.css" rel="stylesheet">
+    <link href="view/css/training-chef-personalizado.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="view/js/html5shiv.js"></script>
     <script src="view/js/respond.min.js"></script>
