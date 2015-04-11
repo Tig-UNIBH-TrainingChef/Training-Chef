@@ -13,7 +13,7 @@
                     <h3>Training Chef</h3>
                     <p>Training Chef é uma  aplicação web, com o intuito de incentivar futuros cozinheiros a
                         mostrar seu talento na arte de cozinhar, em restaurantes que adotem esta ideia inovadora.</p>
-                    <p>Este é um trabalho de faculdade. Todos os dados apresentados neste site são fictícios.</p>
+                    <p>O site ainda está em construção, mas estamos trabalhando para disponibilizá-lo em breve.</p>
                     <p><a class="btn btn-info" href="quem_somos.php">Saiba mais »</a></p>
                 </div>    
             </div>
