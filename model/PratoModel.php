@@ -44,9 +44,43 @@ class PratoModel implements Model
             or die ("Aconteceu um erro: Não foi possível cadastrar o prato.");
     }
 
+    /**
+     * Função para atualizar as informações do prato do cozinheiro
+     * @param \Entidade $Prato
+     */
     public function atualizar(\Entidade $Prato)
     {
+        $DAL = new DAL();
+        $DAL->conectar();
         
+        $arrayUpdate = array();
+        
+        if ($Prato->getCozinheiro() != null)
+        {
+            if ($Prato->getCozinheiro()->getID() != null)
+                $arrayUpdate[] = "cozinheiro_idcozinheiro = " . $Prato->getCozinheiro()->getID();
+        }
+        
+        if ($Prato->getNome() != null)
+            $arrayUpdate[] = "nome = '" . $Prato->getNome() . "'";
+        
+        if ($Prato->getDescricao() != null)
+            $arrayUpdate[] = "descricao = '" . $Prato->getDescricao() . "'";
+        
+        if ($Prato->getImagem() != null)
+            $arrayUpdate[] = "imagem = '" . $Prato->getImagem() . "'";
+        
+        if ($Prato->getReceita() != null)
+            $arrayUpdate[] = "receita = '" . $Prato->getReceita() . "'";
+        
+        $set = " SET " . implode(", ", $arrayUpdate);
+        
+        $sql = "UPDATE prato"
+             . $set
+             . " WHERE idprato = " . $Prato->getID();
+        
+        mysql_query($sql)
+            or die ("Aconteceu um erro: Não foi possível atualizar o prato.");
     }
 
     /**

@@ -23,7 +23,14 @@ else
             <?php include_once 'view/menu_esquerda.php'; ?>
             <div id="page-wrapper" >
                 <div class="row">
-                    <div class="col-md-12"><h2><?php print $Prato->getNome(); ?></h2></div>
+                    <div id="label_nome_prato" class="col-md-12">
+                        <h2>
+                            <?php print $Prato->getNome(); ?> 
+                            <a href="#" onclick="mostrarFormEditarNomePrato(<?php print $Prato->getID(); ?>, '<?php print $Prato->getNome(); ?>');">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                        </h2>
+                    </div>
                 </div>
                 <hr />
                 <div class="row">
@@ -40,19 +47,21 @@ else
                     <div class="col-md-8 col-sm-4">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Descrição
+                                Descrição 
+                                <a href="#" onclick="mostrarFormEditarDescricaoPrato(<?php print $Prato->getID(); ?>);">
+                                    <span id="btn_editar_descricao_prato" class="glyphicon glyphicon-pencil"></span>
+                                </a>
                             </div>
-                            <div class="panel-body text-justify">
-                                <?php print str_replace("\n", "<br>", $Prato->getDescricao()); ?></p>
-                            </div>
+                            <div class="panel-body text-justify" id="corpo_descricao_prato"><?php print str_replace("\n", "<br>", $Prato->getDescricao()); ?></div>
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Receita:
+                                Receita: 
+                                <a href="#" onclick="mostrarFormEditarReceitaPrato(<?php print $Prato->getID(); ?>);">
+                                    <span id="btn_editar_receita_prato" class="glyphicon glyphicon-pencil"></span>
+                                </a>
                             </div>
-                            <div class="panel-body text-justify">
-                                <?php print str_replace("\n", "<br>", $Prato->getReceita()); ?>
-                            </div>
+                            <div class="panel-body text-justify" id="corpo_receita_prato"><?php print str_replace("\n", "<br>", $Prato->getReceita()); ?></div>
                         </div>
                     </div>
                 </div>
@@ -66,5 +75,6 @@ else
         <script src="view/js/custom.js"></script>
         <script src="view/js/validacoes/validaFormNovoPrato.js"></script>
         <script src="view/js/ajax/funcoesAjax.js"></script>
+        <script src="view/js/pag/detalhes_prato.js"></script>
     </body>
 </html>
