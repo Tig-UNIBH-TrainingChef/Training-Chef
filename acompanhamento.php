@@ -12,7 +12,7 @@
                 </div>
                 <div class="center wow fadeInDown">
                     <h3>Sistema interno para cozinheiros:</h3>
-                    <progress class="barra_progresso" max="100" value="16"></progress><br><br><br>
+                    <progress class="barra_progresso" max="100" value="33"></progress><br><br><br>
                     <h3>Sistema interno para restaurantes:</h3>
                     <progress class="barra_progresso" max="100" value="0"></progress><br><br><br><br><br>
                     <p>
