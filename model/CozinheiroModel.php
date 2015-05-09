@@ -1,13 +1,6 @@
 <?php
 
-if (file_exists('../core/DAL.php')) { require_once '../core/DAL.php'; }
-else { require_once 'core/DAL.php'; }
-
-if (file_exists('../entity/Cozinheiro.php')) { require_once '../entity/Cozinheiro.php'; }
-else { require_once 'entity/Cozinheiro.php'; }
-
-if (file_exists('model/Model.php')) { require_once 'model/Model.php'; }
-else { require_once 'Model.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Classe modelo para a entidade Cozinheiro
@@ -21,19 +14,20 @@ class CozinheiroModel implements Model
      */
     public function cadastrar(Entidade $Cozinheiro)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $sql = "INSERT INTO cozinheiro (nome,
                                         email,
                                         senha)
                                 VALUES ('" . $Cozinheiro->getNome() . "',
                                         '" . $Cozinheiro->getEmail() . "',
                                         '" . $Cozinheiro->getSenha() . "')";
-        mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível cadastrar o cozinheiro.");
+        $DAL = new DAL();
+        $DAL->query($sql);
     }
     
+    /**
+     * Função para atualizar um cozinheiro
+     * @param Entidade $Cozinheiro
+     */
     public function atualizar(Entidade $Cozinheiro)
     {
         
@@ -46,20 +40,16 @@ class CozinheiroModel implements Model
      */
     public function buscar($id)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $sql = "SELECT idcozinheiro,
                        nome,
                        email,
                        senha
                   FROM cozinheiro
                  WHERE idcozinheiro = " . $id;
-                   
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível buscar um cozinheiro por e-mail e senha");
         
-        $row = mysql_fetch_array($query);
+        $DAL = new DAL();
+        $query = $DAL->query($sql);
+        $row = mysqli_fetch_array($query);
                 
         $Cozinheiro = new Cozinheiro();
         $Cozinheiro->setID($row['idcozinheiro']);
@@ -78,9 +68,6 @@ class CozinheiroModel implements Model
      */
     public function buscarPorEmailSenha($email, $senha)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $sql = "SELECT idcozinheiro,
                        nome,
                        email,
@@ -89,12 +76,12 @@ class CozinheiroModel implements Model
                  WHERE email = '{$email}'
                    AND senha = '{$senha}'";
                    
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível buscar um cozinheiro por e-mail e senha");
+        $DAL = new DAL();
+        $query = $DAL->query($sql);
         
         $ListaCozinheiros = array();
         
-        while ($row = mysql_fetch_array($query))
+        while ($row = mysqli_fetch_array($query))
         {        
             $Cozinheiro = new Cozinheiro();
             $Cozinheiro->setID($row['idcozinheiro']);

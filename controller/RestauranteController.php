@@ -1,10 +1,6 @@
 <?php
 
-if (file_exists('controller/EntidadeAutenticavel.php')) { require_once 'controller/EntidadeAutenticavel.php'; }
-else { require_once 'EntidadeAutenticavel.php'; }
-
-if (file_exists('../model/RestauranteModel.php')) { require_once '../model/RestauranteModel.php'; }
-else { require_once 'model/RestauranteModel.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Classe controladora para a entidade Restaurante

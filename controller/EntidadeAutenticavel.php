@@ -1,7 +1,6 @@
 <?php
 
-if (file_exists('../entity/Entidade.php')) { require_once '../entity/Entidade.php'; }
-else { require_once 'entity/Entidade.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Interface para controllers de entidades autenticáveis
@@ -13,18 +12,15 @@ interface EntidadeAutenticavel
      * Função para autenticar uma entidade.
      * @param Entidade $Entidade
      */
-    public function autenticar(Entidade $Entidade);
-    
+    public function autenticar(Entidade $Entidade);    
     /**
      * Função para validar uma sessão.
      */
-    public function validarSessao();
-    
+    public function validarSessao();    
     /**
      * Função para finalizar uma sessão.
      */
-    public function finalizarSessao();
-    
+    public function finalizarSessao();    
     /**
      * Função para retornar a instancia da entidade autenticavel.
      */

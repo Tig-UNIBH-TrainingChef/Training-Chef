@@ -28,7 +28,7 @@ function editarNomePrato(idPrato)
     nomePrato = $('#novo_nome_prato').val();
     
     $.post(
-        '../controller/PratoController.php',
+        '../Controller/PratoController.php',
         {
             funcao : 'editarNome',
             param  : idPrato,
@@ -88,7 +88,7 @@ function editarDescricaoPrato(idPrato)
     descricaoPrato = $('#nova_descricao_prato').val();
     
     $.post(
-        '../controller/PratoController.php',
+        '../Controller/PratoController.php',
         {
             funcao : 'editarDescricao',
             param  : idPrato,
@@ -144,7 +144,7 @@ function editarReceitaPrato(idPrato)
     receitaPrato = $('#nova_receita_prato').val();
     
     $.post(
-        '../controller/PratoController.php',
+        '../Controller/PratoController.php',
         {
             funcao : 'editarReceita',
             param  : idPrato,
@@ -178,7 +178,7 @@ function deletarPrato(id)
 {
     if (confirm("Você tem certeza que deseja apagar o prato?"))
     {
-        $.post('../controller/PratoController.php',
+        $.post('../Controller/PratoController.php',
         {
             funcao : 'deletar',
             param  : id

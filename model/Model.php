@@ -1,7 +1,6 @@
 <?php
 
-if (file_exists('../entity/Entidade.php')) { require_once '../entity/Entidade.php'; }
-else { require_once 'entity/Entidade.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Interface para implementação de classes modelo

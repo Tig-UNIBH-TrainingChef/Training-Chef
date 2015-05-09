@@ -1,7 +1,6 @@
 <?php
 
-if (file_exists('../model/PratoModel.php')) { require_once '../model/PratoModel.php'; }
-else { require_once 'model/PratoModel.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Classe controladora para a entidade prato.

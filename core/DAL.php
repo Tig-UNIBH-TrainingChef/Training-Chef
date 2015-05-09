@@ -39,6 +39,8 @@ class DAL
         $this->conexao = mysqli_connect(DAL::$SERVIDOR, DAL::$USUARIO, DAL::$SENHA)
                 or die("Não foi possível conectar ao banco de dados");
         mysqli_select_db($this->conexao, DAL::$BANCO);
+        
+        return $this;
     }
     
     /**

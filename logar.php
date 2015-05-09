@@ -1,10 +1,11 @@
 <?php
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+
 if (isset($_POST['btn_logar']))
 {
     if ($_POST['tipo'] == "cozinheiro")
     {
-        include_once 'controller/CozinheiroController.php';
-        
         $Cozinheiro = new Cozinheiro();
         $Cozinheiro->setEmail($_POST['email']);
         $Cozinheiro->setSenha($_POST['senha']);
@@ -21,8 +22,6 @@ if (isset($_POST['btn_logar']))
     }
     else if ($_POST['tipo'] == "restaurante")
     {
-        include_once 'controller/RestauranteController.php';
-        
         $Restaurante = new Restaurante();
         $Restaurante->setEmail($_POST['email']);
         $Restaurante->setSenha($_POST['senha']);
@@ -71,18 +70,6 @@ if (isset($_POST['btn_logar']))
                 </div>
             </div>
         </section>
-        
         <?php include 'view/rodape.php'; ?>
-
-        <script src="view/js/jquery.js"></script>
-        <script type="text/javascript">
-            $('.carousel').carousel();
-        </script>
-        <script src="view/js/bootstrap.min.js"></script>
-        <script src="view/js/jquery.prettyPhoto.js"></script>
-        <script src="view/js/jquery.isotope.min.js"></script>
-        <script src="view/js/main.js"></script>
-        <script src="view/js/wow.min.js"></script>
-        <script src="view/js/validacoes/validaFormLogin.js"></script>
     </body>
 </html>

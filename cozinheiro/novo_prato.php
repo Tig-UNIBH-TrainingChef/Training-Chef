@@ -1,7 +1,5 @@
 <?php
-include_once 'core/SiteConfig.php';
-include_once '../controller/CozinheiroController.php';
-include_once '../model/PratoModel.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 if (isset($_POST['btn_cadastrar']))
 {
@@ -101,12 +99,5 @@ if (isset($_POST['btn_cadastrar']))
                 </form>
             </div>
         </div>
-        <script src="view/js/jquery-1.10.2.js"></script>
-        <script src="view/js/bootstrap.min.js"></script>
-        <script src="view/js/jquery.metisMenu.js"></script>
-        <script src="view/js/morris/raphael-2.1.0.min.js"></script>
-        <script src="view/js/morris/morris.js"></script>
-        <script src="view/js/custom.js"></script>
-        <script src="view/js/validacoes/validaFormNovoPrato.js"></script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-<?php include_once './core/SiteConfig.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php'; ?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,18 @@
     <link href="view/css/main.css" rel="stylesheet">
     <link href="view/css/responsive.css" rel="stylesheet">
     <link href="view/css/training-chef-personalizado.css" rel="stylesheet">
+    
+    <!-- js -->
+    <script src="view/js/jquery.js"></script>
+    <script src="view/js/bootstrap.min.js"></script>
+    <script src="view/js/jquery.prettyPhoto.js"></script>
+    <script src="view/js/jquery.isotope.min.js"></script>
+    <script src="view/js/main.js"></script>
+    <script src="view/js/wow.min.js"></script>
+    <script type="text/javascript">
+        $('.carousel').carousel();
+    </script>
+    
     <!--[if lt IE 9]>
     <script src="view/js/html5shiv.js"></script>
     <script src="view/js/respond.min.js"></script>
@@ -23,4 +35,5 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="view/images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="view/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="view/images/ico/apple-touch-icon-57-precomposed.png">
+    
 </head>

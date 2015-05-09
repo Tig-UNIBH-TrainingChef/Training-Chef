@@ -27,17 +27,6 @@
                 </div>
             </div>
         </section>
-        
         <?php include 'view/rodape.php'; ?>
-
-        <script src="view/js/jquery.js"></script>
-        <script type="text/javascript">
-            $('.carousel').carousel()
-        </script>
-        <script src="view/js/bootstrap.min.js"></script>
-        <script src="view/js/jquery.prettyPhoto.js"></script>
-        <script src="view/js/jquery.isotope.min.js"></script>
-        <script src="view/js/main.js"></script>
-        <script src="view/js/wow.min.js"></script>
     </body>
 </html>

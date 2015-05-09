@@ -1,13 +1,6 @@
 <?php
 
-if (file_exists('../core/DAL.php')) { require_once '../core/DAL.php'; }
-else { require_once 'core/DAL.php'; }
-
-if (file_exists('../entity/Restaurante.php')) { require_once '../entity/Restaurante.php'; }
-else { require_once 'entity/Restaurante.php'; }
-
-if (file_exists('model/Model.php')) { require_once 'model/Model.php'; }
-else { require_once 'Model.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Classe modelo para a entidade Restaurante
@@ -68,7 +61,7 @@ class RestauranteModel implements Model
         
         $ListaRestaurantes = array();
         
-        while ($row = mysql_fetch_array($query))
+        while ($row = mysqli_fetch_array($query))
         {        
             $Restaurante = new Restaurante();
             $Restaurante->setID($row['idrestaurante']);

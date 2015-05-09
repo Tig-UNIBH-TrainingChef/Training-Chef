@@ -1,6 +1,7 @@
 <?php
-include_once '../controller/CozinheiroController.php';
-include_once 'core/SiteConfig.php';
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+
 $CozinheiroController = new CozinheiroController();
 $CozinheiroController->validarSessao();
 

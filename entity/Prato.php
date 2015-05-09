@@ -1,10 +1,6 @@
 <?php
 
-if (file_exists('entity/Entidade.php')) { require_once 'entity/Entidade.php'; }
-else { require_once 'Entidade.php'; }
-
-if (file_exists('entity/Cozinheiro.php')) { require_once 'entity/Cozinheiro.php'; }
-else { require_once 'Cozinheiro.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Entidade prato

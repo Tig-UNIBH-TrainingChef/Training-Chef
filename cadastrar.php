@@ -1,10 +1,11 @@
 <?php
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+
 if (isset($_POST['btn_cadastrar']))
 {
     if ($_POST['tipo'] == "cozinheiro")
     {
-        include_once 'model/CozinheiroModel.php';
-        
         $Cozinheiro = new Cozinheiro();
         $Cozinheiro->setNome($_POST['nome']);
         $Cozinheiro->setEmail($_POST['email']);
@@ -17,8 +18,6 @@ if (isset($_POST['btn_cadastrar']))
     }
     else if ($_POST['tipo'] == "restaurante")
     {
-        include_once 'model/RestauranteModel.php';
-        
         $Restaurante = new Restaurante();
         $Restaurante->setNome($_POST['nome']);
         $Restaurante->setEmail($_POST['email']);
@@ -66,18 +65,6 @@ if (isset($_POST['btn_cadastrar']))
                 </div>
             </div>
         </section>
-        
         <?php include 'view/rodape.php'; ?>
-
-        <script src="view/js/jquery.js"></script>
-        <script type="text/javascript">
-            $('.carousel').carousel()
-        </script>
-        <script src="view/js/bootstrap.min.js"></script>
-        <script src="view/js/jquery.prettyPhoto.js"></script>
-        <script src="view/js/jquery.isotope.min.js"></script>
-        <script src="view/js/main.js"></script>
-        <script src="view/js/wow.min.js"></script>
-        <script src="view/js/validacoes/validaFormCadastro.js"></script>
     </body>
 </html>

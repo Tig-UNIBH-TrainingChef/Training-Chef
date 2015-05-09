@@ -21,7 +21,7 @@ class SiteConfig
      * Caminho da logotipo do site
      * @var String
      */
-    public static $LOGOTIPO_HORIZONTAL = "view/images/logotipo_horizontal.png";
+    public static $LOGOTIPO_HORIZONTAL = "http://trainingchef.com.br/view/images/logotipo_horizontal.png";
     
     /**
      * Prefixo do endereço para as páginas
@@ -33,7 +33,7 @@ class SiteConfig
      * Páginas de menu
      * @var type 
      */
-    public static $MENU_PAGINAS = array(
+    public static $MENU_PAGINAS_SITE = array(
         array(
             'href' => 'index.php',
             'desc' => 'Home'
@@ -45,7 +45,7 @@ class SiteConfig
         array(
             'href' => 'acompanhamento.php',
             'desc' => 'Progresso de construção'
-        ),/*
+        ),
         array(
             'href' => 'cadastrar.php',
             'desc' => 'Cadastrar'
@@ -53,7 +53,26 @@ class SiteConfig
         array(
             'href' => 'logar.php',
             'desc' => 'Acessar'
-        )*/
+        )
+    );
+    
+    /**
+     * Páginas de menu
+     * @var type 
+     */
+    public static $MENU_PAGINAS_SITE_COZINHEIRO = array(
+        array(
+            'href' => 'index.php',
+            'desc' => 'Home'
+        ),
+        array(
+            'href' => 'novo_prato.php',
+            'desc' => 'Novo prato'
+        ),
+        array(
+            'href' => 'meus_pratos.php',
+            'desc' => 'Meus pratos'
+        ),
     );
     
     /**

@@ -1,19 +1,6 @@
 <?php
 
-if (file_exists('../core/DAL.php')) { require_once '../core/DAL.php'; }
-else { require_once 'core/DAL.php'; }
-
-if (file_exists('../entity/Cozinheiro.php')) { require_once '../entity/Cozinheiro.php'; }
-else { require_once 'entity/Cozinheiro.php'; }
-
-if (file_exists('../entity/Prato.php')) { require_once '../entity/Prato.php'; }
-else { require_once 'entity/Prato.php'; }
-
-if (file_exists('model/Model.php')) { require_once 'model/Model.php'; }
-else { require_once 'Model.php'; }
-
-if (file_exists('model/CozinheiroModel.php')) { require_once 'model/CozinheiroModel.php'; }
-else { require_once 'CozinheiroModel.php'; }
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 /**
  * Classe modelo para a entidade Prato
@@ -27,9 +14,6 @@ class PratoModel implements Model
      */
     public function cadastrar(\Entidade $Prato)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $sql = "INSERT INTO prato (cozinheiro_idcozinheiro,
                                    nome,
                                    descricao,
@@ -40,8 +24,8 @@ class PratoModel implements Model
                                    '" . $Prato->getDescricao() . "',
                                    '" . $Prato->getImagem() . "',
                                    '" . $Prato->getReceita() . "')";
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível cadastrar o prato.");
+        $DAL = new DAL();
+        $DAL->query($sql);
     }
 
     /**
@@ -50,9 +34,6 @@ class PratoModel implements Model
      */
     public function atualizar(\Entidade $Prato)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $arrayUpdate = array();
         
         if ($Prato->getCozinheiro() != null)
@@ -79,8 +60,8 @@ class PratoModel implements Model
              . $set
              . " WHERE idprato = " . $Prato->getID();
         
-        mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível atualizar o prato.");
+        $DAL = new DAL();
+        $DAL->query($sql);
     }
 
     /**
@@ -90,9 +71,6 @@ class PratoModel implements Model
      */
     public function buscar($id)
     {
-        $DAL = new DAL();
-        $DAL->conectar();
-        
         $sql = "SELECT idprato,
                        cozinheiro_idcozinheiro,
                        nome,
@@ -102,10 +80,10 @@ class PratoModel implements Model
                   FROM prato
                  WHERE idprato = " . $id;
         
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível buscar os pratos cadastrados.");
+        $DAL = new DAL();
+        $query = $DAL->query($sql);
         
-        $row = mysql_fetch_array($query);
+        $row = mysqli_fetch_array($query);
         
         $Prato = new Prato();
         $Prato->setID($row['idprato']);
@@ -128,7 +106,6 @@ class PratoModel implements Model
     public function buscarPorCozinheiro($idCozinheiro)
     {
         $DAL = new DAL();
-        $DAL->conectar();
         
         $sql = "SELECT idprato,
                        cozinheiro_idcozinheiro,
@@ -139,12 +116,11 @@ class PratoModel implements Model
                   FROM prato
                  WHERE cozinheiro_idcozinheiro = " . $idCozinheiro;
         
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível buscar os pratos cadastrados.");
+        $query = $DAL->query($sql);
         
         $ListaPratos = array();
         
-        while ($row = mysql_fetch_array($query))
+        while ($row = mysqli_fetch_array($query))
         {
             $Prato = new Prato();
             $Prato->setID($row['idprato']);
@@ -169,7 +145,6 @@ class PratoModel implements Model
     public function buscarTodos()
     {
         $DAL = new DAL();
-        $DAL->conectar();
         
         $sql = "SELECT idprato,
                        cozinheiro_idcozinheiro,
@@ -179,12 +154,11 @@ class PratoModel implements Model
                        receita
                   FROM prato";
         
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível buscar os pratos cadastrados.");
+        $query = $DAL->query($sql);
         
         $ListaPratos = array();
         
-        while ($row = mysql_fetch_array($query))
+        while ($row = mysqli_fetch_array($query))
         {
             $Prato = new Prato();
             $Prato->setID($row['idprato']);
@@ -209,13 +183,11 @@ class PratoModel implements Model
     public function deletar($id)
     {
         $DAL = new DAL();
-        $DAL->conectar();
         
         $sql = "DELETE FROM prato
                  WHERE idprato = " . $id;
         
-        $query = mysql_query($sql)
-            or die ("Aconteceu um erro: Não foi possível apagar o prato.");
+        $query = $DAL->query($sql);
     }
 
 }

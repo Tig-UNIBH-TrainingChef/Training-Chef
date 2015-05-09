@@ -1,6 +1,6 @@
 <?php
 
-include_once 'core/SiteConfig.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 $arraySlider = array(
     0 => array(

@@ -1,4 +1,4 @@
-<?php include_once 'core/SiteConfig.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php'; ?>
 <section id="bottom">
     <div class="container wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
         <div class="row">
@@ -28,10 +28,10 @@
             </div>
             <div class="col-sm-6">
                 <ul class="pull-right">
-                    <?php for ($i = 0; $i < count(SiteConfig::$MENU_PAGINAS); $i++) : ?>
+                    <?php for ($i = 0; $i < count(SiteConfig::$MENU_PAGINAS_SITE); $i++) : ?>
                     <li>
-                        <a href="<?php print SiteConfig::$MENU_PAGINAS[$i]['href']; ?>">
-                            <?php print SiteConfig::$MENU_PAGINAS[$i]['desc']; ?>
+                        <a href="<?php print SiteConfig::$MENU_PAGINAS_SITE[$i]['href']; ?>">
+                            <?php print SiteConfig::$MENU_PAGINAS_SITE[$i]['desc']; ?>
                         </a>
                     </li>
                     <?php endfor; ?>
