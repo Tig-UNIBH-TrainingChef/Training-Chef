@@ -66,6 +66,10 @@ class SiteConfig
             'desc' => 'Home'
         ),
         array(
+            'href' => 'perfil.php',
+            'desc' => 'Perfil'
+        ),
+        array(
             'href' => 'novo_prato.php',
             'desc' => 'Novo prato'
         ),
