@@ -1,17 +1,58 @@
 <?php
 
+/**
+ * Camada de Acesso a Dados (Data Access Layer)
+ */
 class DAL
 {
-    private $_servidor = "localhost";
-    private $_usuario = "root";
-    private $_senha = "";
-    private $_banco = "training_chef";
+    /**
+     * Servidor de banco de dados
+     * @var String
+     */
+    private static $SERVIDOR = "mysql.hostinger.com.br";
+    /**
+     * Banco de dados
+     * @var String
+     */
+    private static $BANCO = "u130531012_tchef";
+    /**
+     * Usuário do banco de dados
+     * @var String
+     */
+    private static $USUARIO = "u130531012_admin";
+    /**
+     * Senha do banco de dados
+     * @var String
+     */
+    private static $SENHA = "jALZ7Bj2VZ";
+    /**
+     * Conexão com o banco de dados
+     * @var type 
+     */
+    private $conexao = null;
 
+    /**
+     * Função para conectar no banco de dados.
+     */
     public function conectar()
     {
-        $conexao = mysql_connect($this->_servidor, $this->_usuario, $this->_senha)
+        $this->conexao = mysqli_connect(DAL::$SERVIDOR, DAL::$USUARIO, DAL::$SENHA)
                 or die("Não foi possível conectar ao banco de dados");
-        mysql_select_db($this->_banco);
+        mysqli_select_db($this->conexao, DAL::$BANCO);
+    }
+    
+    /**
+     * Função para executar uma query no banco de dados.
+     * @param String $sql
+     * @return Resultado da query
+     */
+    public function query($sql)
+    {
+        if ($this->conexao == null)
+            $this->conectar();
+            
+        $query = mysqli_query($this->conexao, $sql);
+        return $query;
     }
 }
 
