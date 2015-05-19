@@ -35,7 +35,7 @@ $ListaPostagens = $PostagemModel->buscarTodos();
                 </p>
                 
                 <!-- Modals -->
-                <?php include 'view/modals/alterar_nome_cozinheiro.php'; ?>
+                <?php include 'view/modals/alterar_nome_usuario.php'; ?>
             </div>
         </div>
         
