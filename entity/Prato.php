@@ -9,7 +9,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 class Prato implements Entidade
 {
     private $id;
-    private $cozinheiro;
+    private $usuario;
     private $nome;
     private $descricao;
     private $imagem;
@@ -25,14 +25,14 @@ class Prato implements Entidade
         return $this->id;
     }
     
-    public function setCozinheiro(Cozinheiro $Cozinheiro)
+    public function setUsuario(Usuario $Usuario)
     {
-        $this->cozinheiro = $Cozinheiro;
+        $this->usuario = $Usuario;
     }
     
-    public function getCozinheiro()
+    public function getUsuario()
     {
-        return $this->cozinheiro;
+        return $this->usuario;
     }
     
     public function setNome($nome)

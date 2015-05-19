@@ -24,12 +24,6 @@ class SiteConfig
     public static $LOGOTIPO_HORIZONTAL = "http://trainingchef.com.br/view/images/logotipo_horizontal.png";
     
     /**
-     * Prefixo do endereço para as páginas
-     * @var type 
-     */
-    public static $PREFIXO_ENDERECO = "/trainingchef/";
-    
-    /**
      * Páginas de menu
      * @var type 
      */

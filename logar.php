@@ -4,37 +4,18 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 if (isset($_POST['btn_logar']))
 {
-    if ($_POST['tipo'] == "cozinheiro")
+    $Usuario = new Usuario();
+    $Usuario->setEmail($_POST['email']);
+    $Usuario->setSenha($_POST['senha']);
+    
+    $UsuarioController = new UsuarioController();
+    if (!$UsuarioController->autenticar($Usuario))
     {
-        $Cozinheiro = new Cozinheiro();
-        $Cozinheiro->setEmail($_POST['email']);
-        $Cozinheiro->setSenha($_POST['senha']);
-        
-        $CozinheiroController = new CozinheiroController();
-        if (!$CozinheiroController->autenticar($Cozinheiro))
-        {
-            ?>
-            <script>
-                alert("Os dados de autenticação fornecidos não são válidos!");
-            </script>
-            <?php
-        }
-    }
-    else if ($_POST['tipo'] == "restaurante")
-    {
-        $Restaurante = new Restaurante();
-        $Restaurante->setEmail($_POST['email']);
-        $Restaurante->setSenha($_POST['senha']);
-        
-        $RestauranteController = new RestauranteController();
-        if (!$RestauranteController->autenticar($Restaurante))
-        {
-            ?>
-            <script>
-                alert("Os dados de autenticação fornecidos não são válidos!");
-            </script>
-            <?php
-        }
+        ?>
+        <script>
+            alert("Os dados de autenticação fornecidos não são válidos!");
+        </script>
+        <?php
     }
 }
 ?>
@@ -57,12 +38,6 @@ if (isset($_POST['btn_logar']))
                             <form action="logar.php" method="post" onsubmit="return validarForm(this);">
                                 <p><input style="width: 100%" type="email" name="email" placeholder="Seu e-mail" /></p>
                                 <p><input style="width: 100%" type="password" name="senha" placeholder="Sua senha" /></p>
-                                <p>Você é um:</p>
-                                <div class="left">
-                                    <p><input type="radio" name="tipo" value="cozinheiro" checked="checked" /> Cozinheiro</p>
-                                    <p><input type="radio" name="tipo" value="restaurante" /> Restaurante</p>
-                                </div>
-                                <br><br>
                                 <p><button class="btn btn-success" name="btn_logar">Entrar</button></p>
                             </form>
                         </div>

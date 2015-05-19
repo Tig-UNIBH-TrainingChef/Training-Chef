@@ -1,4 +1,4 @@
-<?php include_once './core/AutoLoad.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php'; ?>
 <header id="header">
     <div class="top-bar">
         <div class="container">
@@ -39,7 +39,7 @@
             <div class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <?php for ($i = 0; $i < count(SiteConfig::$MENU_PAGINAS_SITE); $i++) : ?>
-                    <li <?php if ($_SERVER['PHP_SELF'] == SiteConfig::$PREFIXO_ENDERECO . SiteConfig::$MENU_PAGINAS_SITE[$i]['href']) : ?>class="active"<?php endif; ?>>
+                    <li <?php if ($_SERVER['PHP_SELF'] == '/' . SiteConfig::$MENU_PAGINAS_SITE[$i]['href']) : ?>class="active"<?php endif; ?>>
                         <a href="<?php print SiteConfig::$MENU_PAGINAS_SITE[$i]['href']; ?>">
                             <?php print SiteConfig::$MENU_PAGINAS_SITE[$i]['desc']; ?>
                         </a>

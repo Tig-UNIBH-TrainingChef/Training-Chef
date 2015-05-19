@@ -14,12 +14,12 @@ class PratoModel implements Model
      */
     public function cadastrar(\Entidade $Prato)
     {
-        $sql = "INSERT INTO prato (cozinheiro_idcozinheiro,
+        $sql = "INSERT INTO prato (usuario_idusuario,
                                    nome,
                                    descricao,
                                    imagem,
                                    receita)
-                           VALUES ( " . $Prato->getCozinheiro()->getID() . ",
+                           VALUES ( " . $Prato->getUsuario()->getID() . ",
                                    '" . $Prato->getNome() . "',
                                    '" . $Prato->getDescricao() . "',
                                    '" . $Prato->getImagem() . "',
@@ -36,10 +36,10 @@ class PratoModel implements Model
     {
         $arrayUpdate = array();
         
-        if ($Prato->getCozinheiro() != null)
+        if ($Prato->getUsuario() != null)
         {
-            if ($Prato->getCozinheiro()->getID() != null)
-                $arrayUpdate[] = "cozinheiro_idcozinheiro = " . $Prato->getCozinheiro()->getID();
+            if ($Prato->getUsuario()->getID() != null)
+                $arrayUpdate[] = "usuario_idusuario = " . $Prato->getUsuario()->getID();
         }
         
         if ($Prato->getNome() != null)
@@ -71,88 +71,29 @@ class PratoModel implements Model
      */
     public function buscar($id)
     {
-        $sql = "SELECT idprato,
-                       cozinheiro_idcozinheiro,
-                       nome,
-                       descricao,
-                       imagem,
-                       receita
-                  FROM prato
-                 WHERE idprato = " . $id;
-        
-        $DAL = new DAL();
-        $query = $DAL->query($sql);
-        
-        $row = mysqli_fetch_array($query);
-        
-        $Prato = new Prato();
-        $Prato->setID($row['idprato']);
-        $Prato->setNome($row['nome']);
-        $Prato->setDescricao($row['descricao']);
-        $Prato->setImagem($row['imagem']);
-        $Prato->setReceita($row['receita']);
-
-        $CozinheiroModel = new CozinheiroModel();
-        $Prato->setCozinheiro($CozinheiroModel->buscar($row['cozinheiro_idcozinheiro']));
-            
-        return $Prato;
+        $Pratos = $this->buscarTodos(array("idprato = {$id}"));
+        return $Pratos[0];
     }
     
-    /**
-     * Função para buscar pratos por cozinheiro
-     * @param int $idCozinheiro
-     * @return \Prato
-     */
-    public function buscarPorCozinheiro($idCozinheiro)
-    {
-        $DAL = new DAL();
-        
-        $sql = "SELECT idprato,
-                       cozinheiro_idcozinheiro,
-                       nome,
-                       descricao,
-                       imagem,
-                       receita
-                  FROM prato
-                 WHERE cozinheiro_idcozinheiro = " . $idCozinheiro;
-        
-        $query = $DAL->query($sql);
-        
-        $ListaPratos = array();
-        
-        while ($row = mysqli_fetch_array($query))
-        {
-            $Prato = new Prato();
-            $Prato->setID($row['idprato']);
-            $Prato->setNome($row['nome']);
-            $Prato->setDescricao($row['descricao']);
-            $Prato->setImagem($row['imagem']);
-            $Prato->setReceita($row['receita']);
-            
-            $CozinheiroModel = new CozinheiroModel();
-            $Prato->setCozinheiro($CozinheiroModel->buscar($row['cozinheiro_idcozinheiro']));
-            
-            $ListaPratos[] = $Prato;
-        }
-        
-        return $ListaPratos;
-    }
-
     /**
      * Função para buscar todos os pratos.
      * @return \Prato
      */
-    public function buscarTodos()
+    public function buscarTodos($where = null)
     {
+        if ($where)
+            $where = " WHERE " . implode(" AND ", $where);
+        
         $DAL = new DAL();
         
         $sql = "SELECT idprato,
-                       cozinheiro_idcozinheiro,
+                       usuario_idusuario,
                        nome,
                        descricao,
                        imagem,
                        receita
-                  FROM prato";
+                  FROM prato
+               {$where}";
         
         $query = $DAL->query($sql);
         
@@ -167,8 +108,8 @@ class PratoModel implements Model
             $Prato->setImagem($row['imagem']);
             $Prato->setReceita($row['receita']);
             
-            $CozinheiroModel = new CozinheiroModel();
-            $Prato->setCozinheiro($CozinheiroModel->buscar($row['cozinheiro_idcozinheiro']));
+            $UsuarioModel = new UsuarioModel();
+            $Prato->setUsuario($UsuarioModel->buscar(array("idusuario = " . $row['usuario_idusuario']))[0]);
             
             $ListaPratos[] = $Prato;
         }
@@ -187,7 +128,7 @@ class PratoModel implements Model
         $sql = "DELETE FROM prato
                  WHERE idprato = " . $id;
         
-        $query = $DAL->query($sql);
+        $DAL->query($sql);
     }
 
 }

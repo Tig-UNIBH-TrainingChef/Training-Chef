@@ -4,30 +4,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
 
 if (isset($_POST['btn_cadastrar']))
 {
+    $Usuario = new Usuario();
+    $Usuario->setNome($_POST['nome']);
+    $Usuario->setEmail($_POST['email']);
+    $Usuario->setSenha($_POST['senha']);
+    
+    
     if ($_POST['tipo'] == "cozinheiro")
-    {
-        $Cozinheiro = new Cozinheiro();
-        $Cozinheiro->setNome($_POST['nome']);
-        $Cozinheiro->setEmail($_POST['email']);
-        $Cozinheiro->setSenha($_POST['senha']);
-        
-        $CozinheiroModel = new CozinheiroModel();
-        $CozinheiroModel->cadastrar($Cozinheiro);
-        
-        ?><script>alert("Cozinheiro cadastrado com sucesso!");</script><?php
-    }
+        $Usuario->setTipoUsuario(TIPO_USUARIO_COZINHEIRO);
     else if ($_POST['tipo'] == "restaurante")
-    {
-        $Restaurante = new Restaurante();
-        $Restaurante->setNome($_POST['nome']);
-        $Restaurante->setEmail($_POST['email']);
-        $Restaurante->setSenha($_POST['senha']);
-        
-        $RestauranteModel = new RestauranteModel();
-        $RestauranteModel->cadastrar($Restaurante);
-        
-        ?><script>alert("Restaurante cadastrado com sucesso!");</script><?php
-    }
+        $Usuario->setTipoUsuario(TIPO_USUARIO_RESTAURANTE);
+    
+    $UsuarioModel = new UsuarioModel();
+    $UsuarioModel->cadastrar($Usuario);
+    ?><script>alert("Cadastrado com sucesso!");</script><?php
 }
 ?>
 <!DOCTYPE html>
