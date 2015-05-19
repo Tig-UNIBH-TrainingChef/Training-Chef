@@ -66,7 +66,7 @@ $ListaPostagens = $PostagemModel->buscarTodos();
                         </div>
                         <div class="col-md-10">
                             <span class="text-muted">
-                                Por <i><?=$ListaPostagens[$i]->getUsuario()->getNome();?></i> às 
+                                Por <a href="perfil.php?idusuario=<?=$ListaPostagens[$i]->getUsuario()->getID();?>"><i><?=$ListaPostagens[$i]->getUsuario()->getNome();?></i></a> às 
                                 <i><?=date("d/m/Y h:i:s", strtotime($ListaPostagens[$i]->getData()));?></i> - 
                                 <a href="?action=del&post=<?=$ListaPostagens[$i]->getIDPostagem();?>">Deletar</a>
                             </span>

@@ -109,7 +109,7 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                             </div>
                             <div class="col-md-10">
                                 <span class="text-muted">
-                                    Por <i><?= $ListaPostagens[$i]->getUsuario()->getNome(); ?></i> às 
+                                    Por <a href="perfil.php?idusuario=<?=$ListaPostagens[$i]->getUsuario()->getID();?>"><i><?=$ListaPostagens[$i]->getUsuario()->getNome(); ?></i></a> às 
                                     <i><?= date("d/m/Y h:i:s", strtotime($ListaPostagens[$i]->getData())); ?></i> - 
                                     <a href="?action=del&post=<?= $ListaPostagens[$i]->getIDPostagem(); ?>">Deletar</a>
                                 </span>
@@ -145,7 +145,11 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                                     <p><img src="/resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
                                     <p><b><?= $ListaPratos[$i]->getNome() ?></b></p>
                                     <p><i><?= $ListaPratos[$i]->getDescricao() ?></i></p>
-                                    <p><i class="text-muted text-right">por <?= $ListaPratos[$i]->getUsuario()->getNome(); ?></i></p>
+                                    <p>
+                                        <i class="text-muted text-right">
+                                            por <a href="perfil.php?idusuario=<?=$ListaPratos[$i]->getUsuario()->getID();?>"><?=$ListaPratos[$i]->getUsuario()->getNome(); ?></a>
+                                        </i>
+                                    </p>
                                     <p>
                                         <a class="btn btn-default" href="prato.php?idprato=<?= $ListaPratos[$i]->getID(); ?>">Ver detalhes</a>
                                         <?php if ($UsuarioController->getInstance()->getID() == $ListaPratos[$i]->getUsuario()->getID()) : ?>
