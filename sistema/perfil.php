@@ -9,7 +9,7 @@ $UsuarioModel = new UsuarioModel();
 
 $Usuario = new Usuario();
 if (isset($_GET['idusuario']) || trim($_GET['idusuario'] != ""))
-    $Usuario = $UsuarioModel->buscar(array("idusuario = " . $_GET['idusuario']));
+    $Usuario = $UsuarioModel->buscar(array("idusuario = " . $_GET['idusuario']))[0];
 else
     $Usuario = $UsuarioModel->buscar(array("idusuario = " . $UsuarioController->getInstance()->getID()))[0];
 
@@ -25,6 +25,9 @@ $ListaPostagens = $PostagemModel->buscarTodos(array("usuario_idusuario = " . $Us
 
 $PratoModel = new PratoModel();
 $ListaPratos = $PratoModel->buscarTodos(array("usuario_idusuario = " . $Usuario->getID()));
+
+$FormaDeContatoModel = new FormaDeContatoModel();
+$ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario = " . $UsuarioController->getInstance()->getID()));
 ?>
 <div class="container">
     <div class="row">
@@ -40,13 +43,43 @@ $ListaPratos = $PratoModel->buscarTodos(array("usuario_idusuario = " . $Usuario-
 
                 <?php // Informações gerais ?>
                 <p style="padding: 5px 5px 5px 5px;">
-                    <?=$tipoUsuario?> <b><?= $Usuario->getNome(); ?></b> <a href="#modalAlterarNomeUsuario" data-toggle="modal">Alterar</a><br />
+                    <?=$tipoUsuario?> <b><?= $Usuario->getNome(); ?></b>
+                    <?php if ($UsuarioController->getInstance()->getID() == $Usuario->getID()) : ?>
+                    <a href="#modalAlterarNomeUsuario" data-toggle="modal">Alterar</a><br />
+                    <?php endif; ?>
+                    
                     <i><?= $Usuario->getEmail(); ?></i>
                 </p>
-
-                <!-- Modals -->
-                <?php include 'view/modals/alterar_nome_usuario.php'; ?>
+                <br><br>
             </div>
+            
+            <?php // Forma de contato ?>
+            <div class="row">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Contate-me</div>
+                    <div class="panel-body">
+                        <?php if (count($ListaFormaDeContato) == 0) : ?>
+                        <p><i>Nenhuma forma de contato cadastrada.</i></p>
+                        <?php endif; ?>
+                        
+                        <?php for ($i = 0; $i < count($ListaFormaDeContato); $i++) : ?>
+                        <p>
+                            <b><?=$ListaFormaDeContato[$i]->getTipoContato()->getDescricao();?>: </b><br>
+                            <i><?=$ListaFormaDeContato[$i]->getValor();?></i>
+                            <a href="?action=del&contato=<?=$ListaFormaDeContato[$i]->getIDFormaDeContato();?>">Deletar</a>
+                        </p>
+                        <?php endfor; ?>
+                        
+                        <?php if ($UsuarioController->getInstance()->getID() == $Usuario->getID()) : ?>
+                        <p><a href="#modalCadastrarFormaContato" role="button" class="btn btn-success" data-toggle="modal">Cadastrar</a></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modals -->
+            <?php include 'view/modals/alterar_nome_usuario.php'; ?>
+            <?php include 'view/modals/cadastrar_nova_forma_contato.php'; ?>
         </div>
 
         <div class="col-md-5" style="margin: 15px 15px 15px 15px">
@@ -197,6 +230,39 @@ if (isset($_POST['btn_postar_texto'])) {
     }
 }
 
+if (isset($_POST['btn_cadastrar_forma_contato']))
+{
+    if (strlen(trim($_POST['valor_contato'])) == "")
+    {
+        ?>
+        <script>
+            alert("Por favor, escreva um valor válido");
+            window.location = "perfil.php";
+        </script>
+        <?php
+    }
+    else
+    {
+        $TipoContato = new TipoContato();
+        $TipoContato->setID($_POST['tipo_contato']);
+        
+        $FormaDeContato = new FormaDeContato();
+        $FormaDeContato->setUsuario($UsuarioController->getInstance());
+        $FormaDeContato->setTipoContato($TipoContato);
+        $FormaDeContato->setValor($_POST['valor_contato']);
+        
+        $FormaDeContatoModel = new FormaDeContatoModel();
+        $FormaDeContatoModel->cadastrar($FormaDeContato);
+        
+        ?>
+            <script>
+                alert("Contato cadastrado com sucesso!");
+                window.location = "perfil.php";
+            </script>
+        <?php
+    }
+}
+
 if (isset($_POST['btn_cadastrar_novo_prato'])) {
     if (strlen(trim($_POST['nome_prato'])) == 0) {
         ?>
@@ -236,7 +302,7 @@ if (isset($_POST['btn_cadastrar_novo_prato'])) {
             $PratoModel->cadastrar($Prato);
             ?>
             <script>
-                alert("Prato cadastrado com sucesso!.");
+                alert("Prato cadastrado com sucesso!");
                 window.location = "perfil.php";
             </script>
             <?php
@@ -246,9 +312,12 @@ if (isset($_POST['btn_cadastrar_novo_prato'])) {
     }
 }
 
-if (isset($_GET['action'])) {
-    if ($_GET['action'] == 'del') {
-        if (isset($_GET['post'])) {
+if (isset($_GET['action']))
+{
+    if ($_GET['action'] == 'del')
+    {
+        if (isset($_GET['post']))
+        {
             $PostagemModel = new PostagemModel();
             $PostagemModel->deletar($_GET['post']);
             ?>
@@ -257,12 +326,25 @@ if (isset($_GET['action'])) {
                 window.location = "perfil.php";
             </script>
             <?php
-        } else if (isset($_GET['prato'])) {
+        }
+        else if (isset($_GET['prato']))
+        {
             $PratoModel = new PratoModel();
             $PratoModel->deletar($_GET['prato']);
             ?>
             <script>
                 alert("Prato deletado com sucesso!");
+                window.location = "perfil.php";
+            </script>
+            <?php
+        }
+        else if (isset($_GET['contato']))
+        {
+            $FormaDeContatoModel = new FormaDeContatoModel();
+            $FormaDeContatoModel->deletar($_GET['contato']);
+            ?>
+            <script>
+                alert("Contato deletado com sucesso!");
                 window.location = "perfil.php";
             </script>
             <?php

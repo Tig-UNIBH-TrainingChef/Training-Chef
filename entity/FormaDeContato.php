@@ -6,11 +6,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
  * Classe que representa a entidade Forma de Contato
  * @author Victor Vaz <victor-vaz@hotmail.com>
  */
-class FormaDeContato
+class FormaDeContato implements Entidade
 {
     private $idFormaDeContato;
     private $TipoContato;
-    private $idUsuario;
+    private $Usuario;
     private $valor;
     
     public function getIDFormaDeContato(){
@@ -27,11 +27,11 @@ class FormaDeContato
         $this->TipoContato = $TipoContato;
     }
     
-    public function getIDUsuario(){
-        return $this->idUsuario;
+    public function getUsuario(){
+        return $this->Usuario;
     }
-    public function setIDUsuario($id){
-        $this->idUsuario = $id;
+    public function setUsuario(Usuario $Usuario){
+        $this->Usuario = $Usuario;
     }
     
     public function getValor(){

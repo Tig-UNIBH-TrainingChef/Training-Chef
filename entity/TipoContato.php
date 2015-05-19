@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
  * Classe que representa a entidade Tipo de Contato
  * @author Victor Vaz <victor-vaz@hotmail.com>
  */
-class TipoContato
+class TipoContato implements Entidade
 {
     private $id;
     private $descricao;
