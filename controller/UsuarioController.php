@@ -19,16 +19,14 @@ class UsuarioController implements EntidadeAutenticavel
         $UsuarioModel = new UsuarioModel();
         $UsuarioBuscado = $UsuarioModel->buscarPorEmailSenha($Usuario->getEmail(), $Usuario->getSenha());
         
-        if ($UsuarioBuscado->getID() != "")
+        if (isset($UsuarioBuscado))
         {
             @session_start();
             $_SESSION[UsuarioController::SESSION_USUARIO] = $UsuarioBuscado;
             header("Location: sistema/index.php");
         }
         else
-        {
             return false;
-        }
     }
 
     /**
@@ -58,14 +56,10 @@ class UsuarioController implements EntidadeAutenticavel
             $UsuarioBuscado = $UsuarioModel->buscarPorEmailSenha($Usuario->getEmail(), $Usuario->getSenha());
             
             if ($UsuarioBuscado->getID() != "")
-            {
                 $resultadoValidacao = true;
-            }
         }
         else
-        {
             $resultadoValidacao = false;
-        }
         
         if ($resultadoValidacao == false)
         {
