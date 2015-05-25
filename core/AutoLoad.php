@@ -15,6 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Prato.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Postagem.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/FormaDeContato.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/TipoContato.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Restaurante.php';
 
 // Modelos:
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/Model.php';
