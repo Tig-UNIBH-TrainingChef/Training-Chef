@@ -11,7 +11,7 @@ class UsuarioController implements EntidadeAutenticavel
     const SESSION_USUARIO = "USUARIO";
     
     /**
-     * Função para autenticar um usuario
+     * Método para autenticar um usuario
      * @param \Usuario $Usuario
      */
     public function autenticar(\Entidade $Usuario)
@@ -30,7 +30,7 @@ class UsuarioController implements EntidadeAutenticavel
     }
 
     /**
-     * Função para finalizar uma sessão
+     * Método para finalizar uma sessão
      */
     public function finalizarSessao()
     {
@@ -40,7 +40,7 @@ class UsuarioController implements EntidadeAutenticavel
     }
 
     /**
-     * Função para validar uma sessão
+     * Método para validar uma sessão
      * @return boolean
      */
     public function validarSessao()
@@ -70,7 +70,7 @@ class UsuarioController implements EntidadeAutenticavel
     }
 
     /**
-     * Função para retornar a instância do usuario da sessão.
+     * Método para retornar a instância do usuario da sessão.
      * @return \Usuario
      */
     public function getInstance()
@@ -78,6 +78,8 @@ class UsuarioController implements EntidadeAutenticavel
         @session_start();
         return $_SESSION[UsuarioController::SESSION_USUARIO];
     }
+    
+    
 
 }
 
