@@ -13,13 +13,6 @@ if (isset($_GET['idusuario']) || trim($_GET['idusuario'] != ""))
 else
     $Usuario = $UsuarioModel->buscar(array("idusuario = " . $UsuarioController->getInstance()->getID()))[0];
 
-// Define o tipo de usuario:
-$tipoUsuario = "Indeterminado.";
-if ($Usuario->getTipoUsuario() == TIPO_USUARIO_COZINHEIRO)
-    $tipoUsuario = "Cozinheiro";
-else
-    $tipoUsuario = "Restaurante";
-
 $PostagemModel = new PostagemModel();
 $ListaPostagens = $PostagemModel->buscarTodos(array("usuario_idusuario = " . $Usuario->getID()));
 
@@ -43,7 +36,7 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
 
                 <?php // Informações gerais ?>
                 <p style="padding: 5px 5px 5px 5px;">
-                    <?=$tipoUsuario?> <b><?= $Usuario->getNome(); ?></b>
+                    <b><?= $Usuario->getNome(); ?></b>
                     <?php if ($UsuarioController->getInstance()->getID() == $Usuario->getID()) : ?>
                     <a href="#modalAlterarNomeUsuario" data-toggle="modal">Alterar</a><br />
                     <?php endif; ?>
@@ -170,14 +163,62 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                     <?php endfor; ?>
                 </div>
             </div>
-            <?php endif; ?>
+        <?php endif; ?>
                 
             <?php if ($Usuario->getTipoUsuario() == TIPO_USUARIO_RESTAURANTE) : ?>
             <!-- CADASTRO DE INFORMAÇÕES DO RESTAURANTE -->
+            <div class="col-md-4" style="margin: 15px 15px 15px 15px">
+            <?php if ($UsuarioController->getInstance()->getID() == $Usuario->getID()) : ?>
+                <div class="row text-left">
+                    <a href="#modalCadastrarNovoRestaurante" role="button" class="btn btn-success" data-toggle="modal">Novo restaurante</a>
+                </div><br>
+            <?php endif; ?>
+            <div class="row">
+                <div class="row">
+                    <?php if (count($ListaPratos) == 0) : ?>
+                        <p class="text-muted"><i>Sem pratos</i></p>
+                    <?php endif; ?>
+                    <?php for ($i = 0; $i < count($ListaPratos); $i++) : ?>
+                        <?php if ($i % 2 == 0) : ?>
+                        </div>
+                        <div class="row">
+                        <?php endif; ?>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-body" style="padding: 5px 5px 5px 5px;">
+                                    <p><img src="/resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
+                                    <p><b><?= $ListaPratos[$i]->getNome() ?></b></p>
+                                    <p><i><?= $ListaPratos[$i]->getDescricao() ?></i></p>
+                                    <p>
+                                        <i class="text-muted text-right">
+                                            por <a href="perfil.php?idusuario=<?=$ListaPratos[$i]->getUsuario()->getID();?>"><?=$ListaPratos[$i]->getUsuario()->getNome(); ?></a>
+                                        </i>
+                                    </p>
+                                    <p>
+                                        <a class="btn btn-default" href="prato.php?idprato=<?= $ListaPratos[$i]->getID(); ?>">Ver detalhes</a>
+                                        <?php if ($UsuarioController->getInstance()->getID() == $ListaPratos[$i]->getUsuario()->getID()) : ?>
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                                Opções <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                                <!-- IMPLEMENTAR <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Editar</a></li>-->
+                                                <li role="presentation"><a role="menuitem" tabindex="-1" href="perfil.php?action=del&prato=<?= $ListaPratos[$i]->getID() ?>">Excluir</a></li>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
             <?php endif; ?>
 
             <!-- Modais -->
             <?php include 'view/modals/cadastrar_novo_prato.php'; ?>
+            <?php include 'view/modals/cadastrar_novo_restaurante.php'; ?>
         </div>
 
     </div>
@@ -185,32 +226,10 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
 <?php include 'view/footer.php'; ?>
 <?php
 // Tratamento de post
-if (isset($_POST['btn_alterar_nome_usuario'])) {
-    $nome = trim($_POST['novo_nome']);
-
-    if (strlen($nome) == 0) {
-        ?>
-        <script>
-            alert("Informe um nome válido!");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    } else {
-        $UsuarioModel = new UsuarioModel();
-        $id = $UsuarioController->getInstance()->getID();
-
-        $Usuario = new Usuario();
-        $Usuario->setID($id);
-        $Usuario->setNome($nome);
-
-        $UsuarioModel->atualizar($Usuario);
-        ?>
-        <script>
-            alert("Atualizado com sucesso!");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    }
+if (isset($_POST['btn_alterar_nome_usuario']))
+{
+    $UsuarioController->alterarNome($UsuarioController->getInstance()->getID(), $_POST['novo_nome']);
+    ?><script>window.location = "perfil.php";</script><?php
 }
 
 if (isset($_POST['btn_postar_texto'])) {

@@ -81,6 +81,13 @@ $ListaPostagens = $PostagemModel->buscarTodos();
 </div>
 <?php include 'view/footer.php'; ?>
 <?php
+// Tratamento de post
+if (isset($_POST['btn_alterar_nome_usuario']))
+{
+    $UsuarioController->alterarNome($UsuarioController->getInstance()->getID(), $_POST['novo_nome']);
+    ?><script>window.location = "feed.php";</script><?php
+}
+
 if (isset($_POST['btn_postar_texto']))
 {
     $postagem = trim($_POST['texto_post']);
@@ -93,7 +100,7 @@ if (isset($_POST['btn_postar_texto']))
         $Postagem = new Postagem();
         
         $Usuario = $UsuarioController->getInstance();
-        $Postagem->setCozinheiro($Usuario);
+        $Postagem->setUsuario($Usuario);
         $Postagem->setTexto($postagem);
         
         $PostagemModel = new PostagemModel();
@@ -101,7 +108,7 @@ if (isset($_POST['btn_postar_texto']))
         
         ?>
         <script>
-            window.location = "perfil.php";
+            window.location = "feed.php";
         </script>
         <?php
     }
@@ -119,7 +126,7 @@ if (isset($_GET['action']))
             ?>
             <script>
                 alert("Postagem deletada com sucesso!");
-                window.location = "perfil.php";
+                window.location = "feed.php";
             </script>
             <?php
         }
@@ -131,7 +138,7 @@ if (isset($_GET['action']))
             ?>
             <script>
                 alert("Prato deletado com sucesso!");
-                window.location = "perfil.php";
+                window.location = "feed.php";
             </script>
             <?php
         }

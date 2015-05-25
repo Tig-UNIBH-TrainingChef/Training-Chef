@@ -79,8 +79,29 @@ class UsuarioController implements EntidadeAutenticavel
         return $_SESSION[UsuarioController::SESSION_USUARIO];
     }
     
-    
+    /**
+     * Método para alterar o nome de um usuário.
+     * @param int $id
+     * @param string $novoNome
+     */
+    public function alterarNome($id, $novoNome)
+    {
+        if (strlen(trim($novoNome)) == 0)
+        {
+            ?><script> alert("Informe um nome válido!"); </script><?php
+        }
+        else
+        {
+            $UsuarioModel = new UsuarioModel();
 
+            $Usuario = new Usuario();
+            $Usuario->setID($id);
+            $Usuario->setNome(trim($novoNome));
+
+            $UsuarioModel->atualizar($Usuario);
+            ?><script>alert("Atualizado com sucesso!");</script><?php
+        }
+    }
 }
 
 ?>
