@@ -29,3 +29,5 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/TipoContatoModel.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/EntidadeAutenticavel.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/UsuarioController.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/PratoController.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/PostagemController.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/FormaDeContatoController.php';

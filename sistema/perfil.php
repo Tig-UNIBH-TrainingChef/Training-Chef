@@ -232,107 +232,30 @@ if (isset($_POST['btn_alterar_nome_usuario']))
     ?><script>window.location = "perfil.php";</script><?php
 }
 
-if (isset($_POST['btn_postar_texto'])) {
-    $postagem = trim($_POST['texto_post']);
-    if (strlen(str_replace(" ", "", $postagem)) == "") {
-        ?><script>alert("Por favor, escreva um texto válido");</script><?php
-    } else {
-        $Postagem = new Postagem();
-
-        $Usuario = $UsuarioController->getInstance();
-        $Postagem->setUsuario($Usuario);
-        $Postagem->setTexto($postagem);
-
-        $PostagemModel = new PostagemModel();
-        $PostagemModel->cadastrar($Postagem);
-        ?>
-        <script>
-            window.location = "perfil.php";
-        </script>
-        <?php
-    }
+if (isset($_POST['btn_postar_texto']))
+{
+    $PostagemController = new PostagemController();
+    $PostagemController->fazerPost($UsuarioController->getInstance(), $_POST['texto_post']);
+    ?><script>window.location = "perfil.php";</script><?php
 }
 
 if (isset($_POST['btn_cadastrar_forma_contato']))
 {
-    if (strlen(trim($_POST['valor_contato'])) == "")
-    {
-        ?>
-        <script>
-            alert("Por favor, escreva um valor válido");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    }
-    else
-    {
-        $TipoContato = new TipoContato();
-        $TipoContato->setID($_POST['tipo_contato']);
-        
-        $FormaDeContato = new FormaDeContato();
-        $FormaDeContato->setUsuario($UsuarioController->getInstance());
-        $FormaDeContato->setTipoContato($TipoContato);
-        $FormaDeContato->setValor($_POST['valor_contato']);
-        
-        $FormaDeContatoModel = new FormaDeContatoModel();
-        $FormaDeContatoModel->cadastrar($FormaDeContato);
-        
-        ?>
-            <script>
-                alert("Contato cadastrado com sucesso!");
-                window.location = "perfil.php";
-            </script>
-        <?php
-    }
+    $FormaDeContatoController = new FormaDeContatoController();
+    $FormaDeContatoController->cadastrarFormaDeContato($UsuarioController->getInstance(), $_POST['tipo_contato'], $_POST['valor_contato']);
+    ?><script>window.location = "perfil.php";</script><?php
 }
 
-if (isset($_POST['btn_cadastrar_novo_prato'])) {
-    if (strlen(trim($_POST['nome_prato'])) == 0) {
-        ?>
-        <script>
-            alert("Por favor, escreva um nome válido");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    } else if (strlen(trim($_POST['desc_prato'])) == 0) {
-        ?>
-        <script>
-            alert("Por favor, escreva uma descrição válida");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    } else if (strlen(trim($_POST['receita_prato'])) == 0) {
-        ?>
-        <script>
-            alert("Por favor, escreva uma receita válida");
-            window.location = "perfil.php";
-        </script>
-        <?php
-    } else {
-        $uploadfile = $_SERVER['DOCUMENT_ROOT'] . '/resources/prato/' . date("Ymdhisisi") . basename($_FILES['foto']['name']);
-
-        if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadfile)) {
-            $Prato = new Prato();
-            $Prato->setNome($_POST['nome_prato']);
-            $Prato->setDescricao($_POST['desc_prato']);
-            $Prato->setReceita($_POST['receita_prato']);
-            $Prato->setImagem(date("Ymdhisisi") . basename($_FILES['foto']['name']));
-
-            $UsuarioController = new UsuarioController();
-            $Prato->setUsuario($UsuarioController->getInstance());
-
-            $PratoModel = new PratoModel();
-            $PratoModel->cadastrar($Prato);
-            ?>
-            <script>
-                alert("Prato cadastrado com sucesso!");
-                window.location = "perfil.php";
-            </script>
-            <?php
-        } else {
-            ?><script>alert("Não foi possível fazer upload da imagem.");</script><?php
-        }
-    }
+if (isset($_POST['btn_cadastrar_novo_prato']))
+{
+    $Prato = new Prato();
+    $Prato->setNome($_POST['nome_prato']);
+    $Prato->setDescricao($_POST['desc_prato']);
+    $Prato->setReceita($_POST['receita_prato']);
+    
+    $PratoController = new PratoController();
+    $PratoController->cadastrarNovoPrato($UsuarioController->getInstance(), $Prato, $_FILES['foto']);
+    ?><script>window.location = "perfil.php";</script><?php
 }
 
 if (isset($_GET['action']))

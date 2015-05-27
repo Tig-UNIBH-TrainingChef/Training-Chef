@@ -90,28 +90,9 @@ if (isset($_POST['btn_alterar_nome_usuario']))
 
 if (isset($_POST['btn_postar_texto']))
 {
-    $postagem = trim($_POST['texto_post']);
-    if (strlen(str_replace(" ", "", $postagem)) == "")
-    {
-        ?><script>alert("Por favor, escreva um texto válido");</script><?php
-    }
-    else
-    {
-        $Postagem = new Postagem();
-        
-        $Usuario = $UsuarioController->getInstance();
-        $Postagem->setUsuario($Usuario);
-        $Postagem->setTexto($postagem);
-        
-        $PostagemModel = new PostagemModel();
-        $PostagemModel->cadastrar($Postagem);
-        
-        ?>
-        <script>
-            window.location = "feed.php";
-        </script>
-        <?php
-    }
+    $PostagemController = new PostagemController();
+    $PostagemController->fazerPost($UsuarioController->getInstance(), $_POST['texto_post']);
+    ?><script>window.location = "feed.php";</script><?php
 }
 
 if (isset($_GET['action']))
@@ -126,18 +107,6 @@ if (isset($_GET['action']))
             ?>
             <script>
                 alert("Postagem deletada com sucesso!");
-                window.location = "feed.php";
-            </script>
-            <?php
-        }
-        else if (isset($_GET['prato']))
-        {
-            $PratoModel = new PratoModel();
-            $PratoModel->deletar($_GET['prato']);
-            
-            ?>
-            <script>
-                alert("Prato deletado com sucesso!");
                 window.location = "feed.php";
             </script>
             <?php
