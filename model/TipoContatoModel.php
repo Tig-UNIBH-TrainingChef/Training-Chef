@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade Tipo de Contato
@@ -21,7 +21,19 @@ class TipoContatoModel implements Model
         
     }
 
-    public function buscar($where) {
+    public function buscar($where = null)
+    {
+        $query = DAL::query("SELECT idtipo_contato,
+                                    descricao
+                               FROM tipo_contato
+                            " . ($where ? " WHERE " . implode(" AND ", $where) : ""));
+        
+        $ListaTipoContato = array();
+        
+        while ($row = mysqli_fetch_array($query))
+            $ListaTipoContato[] = new TipoContato($row['idtipo_contato'], $row['descricao']);
+        
+        return $ListaTipoContato;
     }
 
     /**
@@ -30,26 +42,7 @@ class TipoContatoModel implements Model
      */
     public function buscarTodos()
     {
-        $DAL = new DAL();
-        
-        $sql = "SELECT idtipo_contato,
-                       descricao
-                  FROM tipo_contato";
-        
-        $query = $DAL->query($sql);
-        
-        $ListaTipoContato = array();
-        
-        while ($row = mysqli_fetch_array($query))
-        {
-            $TipoContato = new TipoContato();
-            $TipoContato->setID($row['idtipo_contato']);
-            $TipoContato->setDescricao($row['descricao']);
-            
-            $ListaTipoContato[] = $TipoContato;
-        }
-        
-        return $ListaTipoContato;
+        return $this->buscar();
     }
 
     public function deletar($id) {

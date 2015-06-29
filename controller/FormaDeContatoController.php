@@ -1,5 +1,7 @@
 <?php
 
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
+
 /**
  * Classe controladora para a entidade Forma de Contato.
  * @author Victor Vaz <victor-vaz@hotmail.com>

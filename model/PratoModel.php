@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade Prato
@@ -14,18 +14,16 @@ class PratoModel implements Model
      */
     public function cadastrar(\Entidade $Prato)
     {
-        $sql = "INSERT INTO prato (usuario_idusuario,
-                                   nome,
-                                   descricao,
-                                   imagem,
-                                   receita)
-                           VALUES ( " . $Prato->getUsuario()->getID() . ",
-                                   '" . $Prato->getNome() . "',
-                                   '" . $Prato->getDescricao() . "',
-                                   '" . $Prato->getImagem() . "',
-                                   '" . $Prato->getReceita() . "')";
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("INSERT INTO prato (usuario_idusuario,
+                                       nome,
+                                       descricao,
+                                       imagem,
+                                       receita)
+                               VALUES ({$Prato->getUsuario()->getID()},
+                                       '{$Prato->getNome()}',
+                                       '{$Prato->getDescricao()}',
+                                       '{$Prato->getImagem()}',
+                                       '{$Prato->getReceita()}')");
     }
 
     /**
@@ -36,32 +34,17 @@ class PratoModel implements Model
     {
         $arrayUpdate = array();
         
-        if ($Prato->getUsuario() != null)
-        {
-            if ($Prato->getUsuario()->getID() != null)
-                $arrayUpdate[] = "usuario_idusuario = " . $Prato->getUsuario()->getID();
-        }
+        if ($Prato->getUsuario() && $Prato->getUsuario()->getID())
+            $arrayUpdate[] = "usuario_idusuario = {$Prato->getUsuario()->getID()}";
         
-        if ($Prato->getNome() != null)
-            $arrayUpdate[] = "nome = '" . $Prato->getNome() . "'";
+        if ($Prato->getNome())      $arrayUpdate[] = "nome      = '{$Prato->getNome()}'";
+        if ($Prato->getDescricao()) $arrayUpdate[] = "descricao = '{$Prato->getDescricao()}'";
+        if ($Prato->getImagem())    $arrayUpdate[] = "imagem    = '{$Prato->getImagem()}'";
+        if ($Prato->getReceita())   $arrayUpdate[] = "receita   = '{$Prato->getReceita()}'";
         
-        if ($Prato->getDescricao() != null)
-            $arrayUpdate[] = "descricao = '" . $Prato->getDescricao() . "'";
-        
-        if ($Prato->getImagem() != null)
-            $arrayUpdate[] = "imagem = '" . $Prato->getImagem() . "'";
-        
-        if ($Prato->getReceita() != null)
-            $arrayUpdate[] = "receita = '" . $Prato->getReceita() . "'";
-        
-        $set = " SET " . implode(", ", $arrayUpdate);
-        
-        $sql = "UPDATE prato"
-             . $set
-             . " WHERE idprato = " . $Prato->getID();
-        
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("UPDATE prato
+                       SET " . implode(", ", $arrayUpdate) . " 
+                     WHERE idprato = {$Prato->getID()}");
     }
 
     /**
@@ -69,52 +52,44 @@ class PratoModel implements Model
      * @param int $id
      * @return \Prato
      */
-    public function buscar($id)
+    public function buscarPorID($id)
     {
-        $Pratos = $this->buscarTodos(array("idprato = {$id}"));
-        return $Pratos[0];
+        return $this->buscar(array("idprato = {$id}"))[0];
+    }
+    
+    public function buscar($where)
+    {
+        $UsuarioModel = new UsuarioModel();
+        
+        $query = DAL::query("SELECT idprato,
+                                    usuario_idusuario,
+                                    nome,
+                                    descricao,
+                                    imagem,
+                                    receita
+                               FROM prato
+                            " . ($where ? " WHERE " . implode(" AND ", $where) : ""));
+        
+        $ListaPratos = array();
+        
+        while ($row = mysqli_fetch_array($query))
+            $ListaPratos[] = new Prato($row['idprato'], $UsuarioModel->buscarPorID($row['usuario_idusuario']), $row['nome'], $row['descricao'], $row['imagem'], $row['receita']);
+        
+        return $ListaPratos;
     }
     
     /**
      * Função para buscar todos os pratos.
      * @return \Prato
      */
-    public function buscarTodos($where = null)
+    public function buscarTodos()
     {
-        if ($where)
-            $where = " WHERE " . implode(" AND ", $where);
-        
-        $DAL = new DAL();
-        
-        $sql = "SELECT idprato,
-                       usuario_idusuario,
-                       nome,
-                       descricao,
-                       imagem,
-                       receita
-                  FROM prato
-               {$where}";
-        
-        $query = $DAL->query($sql);
-        
-        $ListaPratos = array();
-        
-        while ($row = mysqli_fetch_array($query))
-        {
-            $Prato = new Prato();
-            $Prato->setID($row['idprato']);
-            $Prato->setNome($row['nome']);
-            $Prato->setDescricao($row['descricao']);
-            $Prato->setImagem($row['imagem']);
-            $Prato->setReceita($row['receita']);
-            
-            $UsuarioModel = new UsuarioModel();
-            $Prato->setUsuario($UsuarioModel->buscar(array("idusuario = " . $row['usuario_idusuario']))[0]);
-            
-            $ListaPratos[] = $Prato;
-        }
-        
-        return $ListaPratos;
+        return $this->buscar();
+    }
+    
+    public function buscarPratosPorIDUsuario($idUsuario)
+    {
+        return $this->buscar(array("usuario_idusuario = {$idUsuario}"));
     }
 
     /**
@@ -123,12 +98,7 @@ class PratoModel implements Model
      */
     public function deletar($id)
     {
-        $DAL = new DAL();
-        
-        $sql = "DELETE FROM prato
-                 WHERE idprato = " . $id;
-        
-        $DAL->query($sql);
+        DAL::query("DELETE FROM prato WHERE idprato = {$id}");
     }
 
 }

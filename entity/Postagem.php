@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe que representa a entidade postagem
@@ -12,6 +12,14 @@ class Postagem implements Entidade
     private $Usuario;
     private $texto;
     private $data;
+    
+    public function __construct($idPostagem = null, Usuario $Usuario = null, $texto = null, $data = null)
+    {
+        $idPostagem ? $this->setIDPostagem($idPostagem) : null;
+        $Usuario    ? $this->setUsuario($Usuario)       : null;
+        $texto      ? $this->setTexto($texto)           : null;
+        $data       ? $this->setData($data)             : null;
+    }
     
     public function getIDPostagem(){
         return $this->idpostagem;

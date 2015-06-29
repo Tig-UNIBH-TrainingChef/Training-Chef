@@ -1,4 +1,4 @@
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php'; ?>
+<?php require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php"; ?>
 <header id="header">
     <div class="top-bar">
         <div class="container">

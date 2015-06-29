@@ -1,4 +1,4 @@
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php'; ?>
+<?php require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php"; ?>
 <section id="bottom">
     <div class="container wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="600ms">
         <div class="row">

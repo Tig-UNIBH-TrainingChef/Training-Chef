@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe controladora para a entidade Usuario
@@ -49,11 +49,9 @@ class UsuarioController implements EntidadeAutenticavel
         $resultadoValidacao = false;        
         
         if (isset($_SESSION[UsuarioController::SESSION_USUARIO]))
-        {        
-            $Usuario = $_SESSION[UsuarioController::SESSION_USUARIO];
-
+        {
             $UsuarioModel = new UsuarioModel();
-            $UsuarioBuscado = $UsuarioModel->buscarPorEmailSenha($Usuario->getEmail(), $Usuario->getSenha());
+            $UsuarioBuscado = $UsuarioModel->buscarPorIDEmail($_SESSION[UsuarioController::SESSION_USUARIO]->getID(), $_SESSION[UsuarioController::SESSION_USUARIO]->getEmail());
             
             if ($UsuarioBuscado->getID() != "")
                 $resultadoValidacao = true;

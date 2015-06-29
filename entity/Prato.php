@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Entidade prato
@@ -14,6 +14,16 @@ class Prato implements Entidade
     private $descricao;
     private $imagem;
     private $receita;
+    
+    public function __construct($id = null, Usuario $Usuario = null, $nome = null, $descricao = null, $imagem = null, $receita = null)
+    {
+        $id        ? $this->setID($id)               : null;
+        $Usuario   ? $this->setUsuario($Usuario)     : null;
+        $nome      ? $this->setNome($nome)           : null;
+        $descricao ? $this->setDescricao($descricao) : null;
+        $imagem    ? $this->setImagem($imagem)       : null;
+        $receita   ? $this->setReceita($receita)     : null;
+    }
     
     public function setID($id)
     {

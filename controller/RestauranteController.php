@@ -3,13 +3,13 @@
 require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
- * Classe controladora para a entidade prato.
+ * Classe controladora para a entidade Restaurante
  * @author Victor Vaz <victor-vaz@hotmail.com>
  */
-class PratoController
+class RestauranteController
 {
-    public function cadastrarNovoPrato(Usuario $Usuario, Prato $Prato, $novaImagem)
-    {
+    public function cadastrarNovoRestaurante(Usuario $Usuario, Restaurante $Restaurante, $novaImagem)
+    {/*
         if (strlen(trim($Prato->getNome())) == 0)
         {
             ?><script>alert("Por favor, escreva um nome válido");</script><?php
@@ -24,7 +24,7 @@ class PratoController
         }
         else
         {
-            $uploadfile = $_SERVER['DOCUMENT_ROOT'] . '/trainingchef/resources/prato/' . date("Ymdhisisi") . basename($novaImagem['name']);
+            $uploadfile = $_SERVER['DOCUMENT_ROOT'] . '/resources/prato/' . date("Ymdhisisi") . basename($novaImagem['name']);
 
             if (move_uploaded_file($novaImagem['tmp_name'], $uploadfile))
             {
@@ -41,6 +41,7 @@ class PratoController
                 ?><script>alert("Não foi possível fazer upload da imagem.");</script><?php
             }
         }
+     * 
+     */
     }
 }
-?>

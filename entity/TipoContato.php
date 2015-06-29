@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe que representa a entidade Tipo de Contato
@@ -10,6 +10,12 @@ class TipoContato implements Entidade
 {
     private $id;
     private $descricao;
+    
+    public function __construct($id = null, $descricao = null)
+    {
+        $id ? $this->setID($id) : null;
+        $descricao ? $this->setDescricao($descricao) : null;
+    }
     
     public function getID(){
         return $this->id;

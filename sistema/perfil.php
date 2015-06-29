@@ -6,18 +6,13 @@ $UsuarioController = new UsuarioController();
 $UsuarioController->validarSessao();
 
 $UsuarioModel = new UsuarioModel();
-
-$Usuario = new Usuario();
-if (isset($_GET['idusuario']) || trim($_GET['idusuario'] != ""))
-    $Usuario = $UsuarioModel->buscar(array("idusuario = " . $_GET['idusuario']))[0];
-else
-    $Usuario = $UsuarioModel->buscar(array("idusuario = " . $UsuarioController->getInstance()->getID()))[0];
+$Usuario = isset($_GET['idusuario']) ? $UsuarioModel->buscarPorID($_GET['idusuario']) : $UsuarioModel->buscarPorID($UsuarioController->getInstance()->getID());
 
 $PostagemModel = new PostagemModel();
-$ListaPostagens = $PostagemModel->buscarTodos(array("usuario_idusuario = " . $Usuario->getID()));
+$ListaPostagens = $PostagemModel->buscarPostagensIDUsuario($Usuario->getID());
 
 $PratoModel = new PratoModel();
-$ListaPratos = $PratoModel->buscarTodos(array("usuario_idusuario = " . $Usuario->getID()));
+$ListaPratos = $PratoModel->buscarPratosPorIDUsuario($Usuario->getID());
 
 $FormaDeContatoModel = new FormaDeContatoModel();
 $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario = " . $UsuarioController->getInstance()->getID()));
@@ -27,14 +22,13 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
 
         <div class="col-md-2" style="margin: 15px 15px 15px 15px">
             <div class="row">
-                <?php // Foto do perfil ?>
+                
                 <div class="panel panel-primary">
                     <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                        <img src="/resources/perfil/cozinheiro/<?= $Usuario->getImagem(); ?>" style="width: 100%;" class="img-responsive"/>
+                        <img src="../resources/perfil/cozinheiro/<?= $Usuario->getImagem(); ?>" style="width: 100%;" class="img-responsive"/>
                     </div>
                 </div>
 
-                <?php // Informações gerais ?>
                 <p style="padding: 5px 5px 5px 5px;">
                     <b><?= $Usuario->getNome(); ?></b>
                     <?php if ($UsuarioController->getInstance()->getID() == $Usuario->getID()) : ?>
@@ -96,7 +90,7 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                             <div class="col-md-2">
                                 <div class="panel panel-primary">
                                     <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                                        <img src="/resources/perfil/cozinheiro/<?= $ListaPostagens[$i]->getUsuario()->getImagem(); ?>" style="width: 100%;" class="img-responsive"/>
+                                        <img src="../resources/perfil/cozinheiro/<?= $ListaPostagens[$i]->getUsuario()->getImagem(); ?>" style="width: 100%;" class="img-responsive"/>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +129,7 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                                    <p><img src="/resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
+                                    <p><img src="../resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
                                     <p><b><?= $ListaPratos[$i]->getNome() ?></b></p>
                                     <p><i><?= $ListaPratos[$i]->getDescricao() ?></i></p>
                                     <p>
@@ -143,6 +137,35 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                                             por <a href="perfil.php?idusuario=<?=$ListaPratos[$i]->getUsuario()->getID();?>"><?=$ListaPratos[$i]->getUsuario()->getNome(); ?></a>
                                         </i>
                                     </p>
+                                    
+                                    <p>
+                                        <!-- Likes -->
+                                        <?php
+                                        $LikePratoModel = new LikePratoModel();
+                                        $ListaLikesPrato = $LikePratoModel->buscarLikesPrato($ListaPratos[$i]->getID());
+                                        
+                                        if ($LikePratoModel->buscarLikePorIDUsuarioIDPrato($ListaPratos[$i]->getUsuario()->getID(), $ListaPratos[$i]->getID()) > 0)
+                                        {
+                                            ?>
+                                            <a href="perfil.php?action=unlike&idprato=<?=$ListaPratos[$i]->getID()?>">
+                                                <img src="../resources/like/like.png" width="16" />
+                                            </a>
+                                            <?php
+                                        }
+                                        else
+                                        {
+                                            
+                                            ?>
+                                            <a href="perfil.php?action=like&idprato=<?=$ListaPratos[$i]->getID()?>">
+                                                <img src="../resources/like/unlike.png" width="16" />
+                                            </a>
+                                            <?php
+                                        }
+                                        ?>
+                                        <?=count($ListaLikesPrato);?>
+                                        </a>
+                                    </p>
+                                    
                                     <p>
                                         <a class="btn btn-default" href="prato.php?idprato=<?= $ListaPratos[$i]->getID(); ?>">Ver detalhes</a>
                                         <?php if ($UsuarioController->getInstance()->getID() == $ListaPratos[$i]->getUsuario()->getID()) : ?>
@@ -186,7 +209,7 @@ $ListaFormaDeContato = $FormaDeContatoModel->buscar(array("f.usuario_idusuario =
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                                    <p><img src="/resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
+                                    <p><img src="../resources/prato/<?= $ListaPratos[$i]->getImagem() ?>" width="100%" /></p>
                                     <p><b><?= $ListaPratos[$i]->getNome() ?></b></p>
                                     <p><i><?= $ListaPratos[$i]->getDescricao() ?></i></p>
                                     <p>
@@ -291,6 +314,32 @@ if (isset($_GET['action']))
             ?>
             <script>
                 alert("Contato deletado com sucesso!");
+                window.location = "perfil.php";
+            </script>
+            <?php
+        }
+    }
+    else if ($_GET['action'] == 'like')
+    {
+        if (isset($_GET['idprato']))
+        {
+            $LikePratoController = new LikePratoController();
+            $LikePratoController->like($UsuarioController->getInstance()->getID(), $_GET['idprato']);
+            ?>
+            <script>
+                window.location = "perfil.php";
+            </script>
+            <?php
+        }
+    }
+    else if ($_GET['action'] == 'unlike')
+    {
+        if (isset($_GET['idprato']))
+        {
+            $LikePratoController = new LikePratoController();
+            $LikePratoController->unlike($UsuarioController->getInstance()->getID(), $_GET['idprato']);
+            ?>
+            <script>
                 window.location = "perfil.php";
             </script>
             <?php

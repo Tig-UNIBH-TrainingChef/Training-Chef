@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade Postagem
@@ -10,15 +10,12 @@ class PostagemModel implements Model
 {
     public function cadastrar(\Entidade $Postagem)
     {
-        $sql = "INSERT INTO postagem (usuario_idusuario,
-                                      texto,
-                                      data)
-                              VALUES (" . $Postagem->getUsuario()->getID() . ",
-                                      '" . $Postagem->getTexto() . "',
-                                      '" . date("Y-m-d h:i:s") . "')";
-        
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("INSERT INTO postagem (usuario_idusuario,
+                                          texto,
+                                          data)
+                                  VALUES ({$Postagem->getUsuario()->getID()},
+                                          '{$Postagem->getTexto()}',
+                                          '" . date("Y-m-d h:i:s") . "')");
     }
     
     public function atualizar(\Entidade $Entidade)
@@ -26,50 +23,38 @@ class PostagemModel implements Model
         
     }
 
-    public function buscar($id) {
-        
-    }
-
-    public function buscarTodos($where = null)
+    public function buscar($where = null)
     {
-        if ($where)
-            $where = " WHERE " . implode(" AND ", $where);
+        $UsuarioModel = new UsuarioModel();
         
-        $sql = "SELECT idpostagem,
-                       usuario_idusuario,
-                       texto,
-                       data
-                  FROM postagem
-               {$where}
-              ORDER BY idpostagem DESC";
-        
-        $DAL = new DAL();
-        $query = $DAL->query($sql);
+        $query = DAL::query("SELECT idpostagem,
+                                    usuario_idusuario,
+                                    texto,
+                                    data
+                               FROM postagem
+                            " . ($where ? " WHERE " . implode(" AND ", $where) : "") . "
+                           ORDER BY idpostagem DESC");
         
         $ListaPostagens = array();
         
         while ($row = mysqli_fetch_array($query))
-        {
-            $Postagem = new Postagem;
-            $Postagem->setIDPostagem($row['idpostagem']);
-            $Postagem->setTexto($row['texto']);
-            $Postagem->setData($row['data']);
-            
-            $UsuarioModel = new UsuarioModel();
-            $Postagem->setUsuario($UsuarioModel->buscar(array("idusuario = " . $row['usuario_idusuario']))[0]);
-            
-            $ListaPostagens[] = $Postagem;
-        }
+            $ListaPostagens[] = new Postagem($row['idpostagem'], $UsuarioModel->buscarPorID($row['usuario_idusuario']), $row['texto'], $row['data']);
         
         return $ListaPostagens;
     }
 
+    public function buscarTodos()
+    {
+        return $this->buscar();
+    }
+    
+    public function buscarPostagensIDUsuario($idUsuario)
+    {
+        return $this->buscarTodos(array("usuario_idusuario = {$idUsuario}"));
+    }
+
     public function deletar($id)
     {
-        $sql = "DELETE FROM postagem
-                      WHERE idpostagem = {$id}";
-        
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("DELETE FROM postagem WHERE idpostagem = {$id}");
     }
 }

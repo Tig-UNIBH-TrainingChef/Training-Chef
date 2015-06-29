@@ -5,7 +5,7 @@
             <h3 id="modalAlterarNomeUsuarioLabel">Alterar nome</h3>
         </div>
         <div class="modal-body">
-            <p>Novo nome: <input class="form-control" name="novo_nome" type="text" value="<?=$_POST['novo_nome'];?>" /></p>
+            <p>Novo nome: <input class="form-control" name="novo_nome" type="text" value="<?=@$_POST['novo_nome'];?>" /></p>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>

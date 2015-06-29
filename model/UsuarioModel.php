@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade usuario
@@ -14,18 +14,16 @@ class UsuarioModel implements Model
      */
     public function cadastrar(Entidade $Usuario)
     {
-        $sql = "INSERT INTO usuario (nome,
-                                     email,
-                                     senha,
-                                     tipo_usuario,
-                                     imagem)
-                             VALUES ('" . $Usuario->getNome() . "',
-                                     '" . $Usuario->getEmail() . "',
-                                     '" . $Usuario->getSenha() . "',
-                                     '" . $Usuario->getTipoUsuario() . "',
-                                     'default.png')";
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("INSERT INTO usuario (nome,
+                                         email,
+                                         senha,
+                                         tipo_usuario,
+                                         imagem)
+                                 VALUES ('{$Usuario->getNome()}',
+                                         '{$Usuario->getEmail()}',
+                                         SHA1(MD5('{$Usuario->getSenha()}')),
+                                         '{$Usuario->getTipoUsuario()}',
+                                         'default.png')");
     }
     
     /**
@@ -36,23 +34,14 @@ class UsuarioModel implements Model
     {
         $arrayUpdate = array();
         
-        if ($Usuario->getNome() != "")
-            $arrayUpdate[] = "nome = '" . $Usuario->getNome() . "'";
-        if ($Usuario->getEmail() != "")
-            $arrayUpdate[] = "email = '" . $Usuario->getEmail() . "'";
-        if ($Usuario->getSenha() != "")
-            $arrayUpdate[] = "senha = '" . $Usuario->getSenha() . "'";
-        if ($Usuario->getImagem() != "")
-            $arrayUpdate[] = "imagem = '" . $Usuario->getImagem() . "'";
+        if ($Usuario->getNome())   $arrayUpdate[] = "nome   = '{$Usuario->getNome()}'";
+        if ($Usuario->getEmail())  $arrayUpdate[] = "email  = '{$Usuario->getEmail()}'";
+        if ($Usuario->getSenha())  $arrayUpdate[] = "senha  = SHA1(MD5('{$Usuario->getSenha()}'))";
+        if ($Usuario->getImagem()) $arrayUpdate[] = "imagem = '{$Usuario->getImagem()}'";
         
-        $update = implode(",", $arrayUpdate);
-        
-        $sql = "UPDATE usuario
-                   SET " . $update . "
-                 WHERE idusuario = " . $Usuario->getID();
-        
-        $DAL = new DAL();
-        $DAL->query($sql);
+        DAL::query("UPDATE usuario
+                       SET " . (count($arrayUpdate) > 0 ? implode(",", $arrayUpdate) : "") . "
+                     WHERE idusuario = {$Usuario->getID()}");
     }
 
     /**
@@ -62,59 +51,62 @@ class UsuarioModel implements Model
      */
     public function buscar($where = null)
     {
-        if ($where)
-            $where = " WHERE " . implode(" AND ", $where);
-        
-        $sql = "SELECT idusuario,
-                       nome,
-                       email,
-                       senha,
-                       tipo_usuario,
-                       imagem
-                  FROM usuario
-               {$where}";
-        
-        $DAL = new DAL();
-        $query = $DAL->query($sql);
+        $query = DAL::query("SELECT idusuario,
+                                    nome,
+                                    email,
+                                    tipo_usuario,
+                                    imagem
+                               FROM usuario
+                             " . ($where ? " WHERE " . implode(" AND ", $where) : ""));
         
         $ListaUsuarios = array();
         
         while ($row = mysqli_fetch_array($query))
-        {                
-            $Usuario = new Usuario();
-            $Usuario->setID($row['idusuario']);
-            $Usuario->setNome($row['nome']);
-            $Usuario->setEmail($row['email']);
-            $Usuario->setSenha($row['senha']);
-            $Usuario->setTipoUsuario($row['tipo_usuario']);
-            $Usuario->setImagem($row['imagem']);
-            
-            $ListaUsuarios[] = $Usuario;
-        }
+            $ListaUsuarios[] = new Usuario($row['idusuario'], $row['nome'], $row['email'], null, $row['tipo_usuario'], $row['imagem']);
         
         return $ListaUsuarios;
     }
     
     /**
-     * Função para buscar cozinheiros por e-mail e senha.
+     * Método para buscar um determinado usuário
+     * @param integer $id
+     * @return Usuario
+     */
+    public function buscarPorID($id)
+    {
+        return $this->buscar(array("idusuario = {$id}"))[0];
+    }
+    
+    /**
+     * Função para buscar usuarios por e-mail e senha.
      * @param String $email
      * @param String $senha
-     * @return \Cozinheiro Lista de cozinheiros de acordo com a busca.
+     * @return \Usuario Lista de usuarios de acordo com a busca.
      */
     public function buscarPorEmailSenha($email, $senha)
     {
-        $ListaUsuarios = $this->buscar(array("email = '{$email}'", "senha = '{$senha}'"));
-        return $ListaUsuarios[0];
+        return $this->buscar(array("email = '{$email}'", "senha = SHA1(MD5('{$senha}'))"))[0];
+    }
+    
+    /**
+     * Função para buscar usuarios por e-mail e senha.
+     * @param Int id
+     * @param String $email
+     * @return \Cozinheiro Lista de usuarios de acordo com a busca.
+     */
+    public function buscarPorIDEmail($id, $email)
+    {
+        return $this->buscar(array("idusuario = '{$id}'", "email = '{$email}'"))[0];
     }
 
     public function buscarTodos()
     {
-        
+        return $this->buscar();
     }
 
     public function deletar($id)
     {
-        
+        DAL::query("DELETE FROM usuario WHERE idusuario = {$id}");
     }
 
 }

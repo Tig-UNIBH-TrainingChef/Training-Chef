@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade Restaurante
@@ -14,19 +14,18 @@ class RestauranteModel implements Model
      */
     public function cadastrar(\Entidade $Entidade)
     {
-        $DAL = new DAL();        
-        $DAL->query("INSERT INTO restaurante (usuario_idusuario,
-                                              nome,
-                                              imagem,
-                                              endereco,
-                                              cidade,
-                                              codigo_postal)
-                                      VALUES ({$Entidade->getUsuario()->getID()},
-                                              '{$Entidade->getNome()}',
-                                              '{$Entidade->getImagem()}',
-                                              '{$Entidade->getEndereco()}',
-                                              '{$Entidade->getCidade()}',
-                                              '{$Entidade->getCodigoPostal()}')");
+        DAL::query("INSERT INTO restaurante (usuario_idusuario,
+                                             nome,
+                                             imagem,
+                                             endereco,
+                                             cidade,
+                                             codigo_postal)
+                                     VALUES ({$Entidade->getUsuario()->getID()},
+                                            '{$Entidade->getNome()}',
+                                             '{$Entidade->getImagem()}',
+                                             '{$Entidade->getEndereco()}',
+                                             '{$Entidade->getCidade()}',
+                                             '{$Entidade->getCodigoPostal()}')");
     }
 
     /**
@@ -35,8 +34,7 @@ class RestauranteModel implements Model
      */
     public function deletar($id)
     {
-        $DAL = new DAL();        
-        $DAL->query("DELETE FROM restaurante WHERE idrestaurante = {$id}");
+        DAL::query("DELETE FROM restaurante WHERE idrestaurante = {$id}");
     }
     
     /**
@@ -47,17 +45,15 @@ class RestauranteModel implements Model
     {
         $arrayUpdate = array();
         
-        if (isset($Entidade->getNome()))         $arrayUpdate[] = "nome = '{$Entidade->getNome()}'";
-        if (isset($Entidade->getImagem()))       $arrayUpdate[] = "imagem = '{$Entidade->getImagem()}'";
-        if (isset($Entidade->getEndereco()))     $arrayUpdate[] = "endereco = '{$Entidade->getEndereco()}'";
-        if (isset($Entidade->getCidade()))       $arrayUpdate[] = "cidade = '{$Entidade->getCidade()}'";
-        if (isset($Entidade->getCodigoPostal())) $arrayUpdate[] = "codigo_postal = '{$Entidade->getCodigoPostal()}'";
+        if ($Entidade->getNome() != "")         $arrayUpdate[] = "nome = '{$Entidade->getNome()}'";
+        if ($Entidade->getImagem() != "")       $arrayUpdate[] = "imagem = '{$Entidade->getImagem()}'";
+        if ($Entidade->getEndereco() != "")     $arrayUpdate[] = "endereco = '{$Entidade->getEndereco()}'";
+        if ($Entidade->getCidade() != "" )      $arrayUpdate[] = "cidade = '{$Entidade->getCidade()}'";
+        if ($Entidade->getCodigoPostal() != "") $arrayUpdate[] = "codigo_postal = '{$Entidade->getCodigoPostal()}'";
         
-        $DAL = new DAL();
-        
-        $DAL->query("UPDATE restaurante
-                        SET " . implode(",", $arrayUpdate) ."
-                      WHERE idrestaurante = {$Entidade->getIDRestaurante()}");
+        DAL::query("UPDATE restaurante
+                       SET " . implode(",", $arrayUpdate) ."
+                     WHERE idrestaurante = {$Entidade->getIDRestaurante()}");
     }
 
     /**
@@ -67,33 +63,20 @@ class RestauranteModel implements Model
      */
     public function buscar($where = null)
     {
-        $DAL = new DAL();
+        $UsuarioModel = new UsuarioModel();
         
-        $query = $DAL->query("SELECT idrestaurante,
-                                     nome,
-                                     imagem,
-                                     endereco,
-                                     cidade,
-                                     codigo_postal
-                             " . ($where != null ? " WHERE " . implode(" AND ", $where) : ""));
+        $query = DAL::query("SELECT idrestaurante,
+                                    nome,
+                                    imagem,
+                                    endereco,
+                                    cidade,
+                                    codigo_postal
+                            " . ($where ? " WHERE " . implode(" AND ", $where) : ""));
         
         $ListaRestaurantes = array();
         
         while ($row = mysqli_fetch_array($query))
-        {
-            $Restaurante = new Restaurante();
-            $Restaurante->setIDRestaurante($row['idrestaurante']);
-            $Restaurante->setNome($row['nome']);
-            $Restaurante->setImagem($row['imagem']);
-            $Restaurante->setEndereco($row['endereco']);
-            $Restaurante->setCidade($row['cidade']);
-            $Restaurante->setCodigoPostal($row['codigo_postal']);
-            
-            $UsuarioModel = new UsuarioModel();
-            $Restaurante->setUsuario($UsuarioModel->buscar(array("idusuario = " . $row['usuario_idusuario']))[0]);
-            
-            $ListaRestaurantes[] = $Restaurante;
-        }
+            $ListaRestaurantes[] = new Restaurante($row['idrestaurante'], $UsuarioModel->buscar(array("idusuario = " . $row['usuario_idusuario']))[0], $row['nome'], $row['imagem'], $row['endereco'], $row['cidade'], $row['codigo_postal']);
         
         return $ListaRestaurantes;
     }

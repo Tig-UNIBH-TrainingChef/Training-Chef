@@ -5,14 +5,14 @@ include 'view/navegacao.php';
 if ($_GET['idprato'] == "" || !isset($_GET['idprato']))
     header("Location: index.php");
 
-$UsuarioController = new CozinheiroController();
+$UsuarioController = new UsuarioController();
 $UsuarioController->validarSessao();
 
-$UsuarioModel = new CozinheiroModel();
-$Usuario = $UsuarioModel->buscar($UsuarioController->getInstance()->getID());
+$UsuarioModel = new UsuarioModel();
+$Usuario = $UsuarioModel->BuscarPorID($UsuarioController->getInstance()->getID());
 
 $PratoModel = new PratoModel();
-$Prato = $PratoModel->buscar($_GET['idprato']);
+$Prato = $PratoModel->buscarPorID($_GET['idprato']);
 ?>
 <div class="container">
     <div class="row">
@@ -22,7 +22,34 @@ $Prato = $PratoModel->buscar($_GET['idprato']);
                 <?php // Foto do prato ?>
                 <div class="panel panel-primary">
                     <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                        <img src="/resources/prato/<?=$Prato->getImagem();?>" style="width: 100%;" class="img-responsive"/>
+                        <p><img src="../resources/prato/<?=$Prato->getImagem();?>" style="width: 100%;" class="img-responsive"/></p>
+                        <p>
+                            <!-- Likes -->
+                            <?php
+                            $LikePratoModel = new LikePratoModel();
+                            $ListaLikesPrato = $LikePratoModel->buscarLikesPrato($Prato->getID());
+
+                            if ($LikePratoModel->buscarLikePorIDUsuarioIDPrato($Prato->getUsuario()->getID(), $Prato->getID()) > 0)
+                            {
+                                ?>
+                                <a href="prato.php?action=unlike&idprato=<?=$Prato->getID()?>">
+                                    <img src="../resources/like/like.png" width="16" />
+                                </a>
+                                <?php
+                            }
+                            else
+                            {
+
+                                ?>
+                                <a href="prato.php?action=like&idprato=<?=$Prato->getID()?>">
+                                    <img src="../resources/like/unlike.png" width="16" />
+                                </a>
+                                <?php
+                            }
+                            ?>
+                            <?=count($ListaLikesPrato);?>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -33,13 +60,13 @@ $Prato = $PratoModel->buscar($_GET['idprato']);
                             <div class="col-md-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-body" style="padding: 5px 5px 5px 5px;">
-                                        <img src="/resources/perfil/cozinheiro/<?=$Prato->getCozinheiro()->getImagem();?>" style="width: 100%;" class="img-responsive"/>
+                                        <img src="../resources/perfil/cozinheiro/<?=$Prato->getUsuario()->getImagem();?>" style="width: 100%;" class="img-responsive"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <p><b>Cozinheiro:</b> <?=$Prato->getCozinheiro()->getNome();?></p>
-                                <p><a role="button" class="btn btn-primary" href="perfil.php?idcozinheiro=<?=$Prato->getCozinheiro()->getID();?>">Ver perfil</a></p>
+                                <p><b>Cozinheiro:</b> <?=$Prato->getUsuario()->getNome();?></p>
+                                <p><a role="button" class="btn btn-primary" href="perfil.php?idcozinheiro=<?=$Prato->getUsuario()->getID();?>">Ver perfil</a></p>
                             </div>
                         </div>
                     </div>
@@ -70,3 +97,32 @@ $Prato = $PratoModel->buscar($_GET['idprato']);
     </div>
 </div>
 <?php include 'view/footer.php'; ?>
+
+<?php
+if ($_GET['action'] == 'like')
+{
+    if (isset($_GET['idprato']))
+    {
+        $LikePratoController = new LikePratoController();
+        $LikePratoController->like($UsuarioController->getInstance()->getID(), $_GET['idprato']);
+        ?>
+        <script>
+            window.location = "prato.php?idprato=<?=$_GET['idprato']?>";
+        </script>
+        <?php
+    }
+}
+else if ($_GET['action'] == 'unlike')
+{
+    if (isset($_GET['idprato']))
+    {
+        $LikePratoController = new LikePratoController();
+        $LikePratoController->unlike($UsuarioController->getInstance()->getID(), $_GET['idprato']);
+        ?>
+        <script>
+            window.location = "prato.php?idprato=<?=$_GET['idprato']?>";
+        </script>
+        <?php
+    }
+}
+?>

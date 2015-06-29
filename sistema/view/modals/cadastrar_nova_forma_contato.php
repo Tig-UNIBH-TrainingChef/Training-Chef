@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 $UsuarioController = new UsuarioController();
 $UsuarioController->validarSessao();
@@ -28,7 +28,7 @@ $ListaTipoContato = $TipoContatoModel->buscarTodos();
             </p>
             <p>
                 Valor:
-                <input name="valor_contato" class="form-control" value="<?=$_POST['valor_contato'];?>" />
+                <input name="valor_contato" class="form-control" value="<?=@$_POST['valor_contato']?>" />
             </p>
         </div>
         <div class="modal-footer">

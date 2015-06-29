@@ -1,33 +1,46 @@
 <?php
 
-/**
- * Arquivo que faz o include de todos os arquivos do MVC do programa.
- */
+$diretorioConfig = "{$_SERVER['DOCUMENT_ROOT']}/trainingchef";
+$arrayMVC = array(
+    
+    'Core' => array(
+        'DAL.php',
+        'SiteConfig.php'
+    ),
+    
+    'Entity' => array(
+        'Entidade.php',
+        'FormaDeContato.php',
+        'Postagem.php',
+        'Prato.php',
+        'Restaurante.php',
+        'TipoContato.php',
+        'Usuario.php',
+        'LikePrato.php'
+    ),
+    
+    'Model' => array(
+        'Model.php',
+        'FormaDeContatoModel.php',
+        'PostagemModel.php',
+        'PratoModel.php',
+        'RestauranteModel.php',
+        'TipoContatoModel.php',
+        'UsuarioModel.php',
+        'LikePratoModel.php'
+    ),
+    
+    'Controller' => array(
+        'EntidadeAutenticavel.php',
+        'FormaDeContatoController.php',
+        'PostagemController.php',
+        'PratoController.php',
+        'RestauranteController.php',
+        'UsuarioController.php',
+        'LikePratoController.php'
+    )
+);
 
-// Core:
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/DAL.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/SiteConfig.php';
-
-// Entidades:
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Entidade.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Usuario.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Prato.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Postagem.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/FormaDeContato.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/TipoContato.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Entity/Restaurante.php';
-
-// Modelos:
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/Model.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/UsuarioModel.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/PratoModel.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/PostagemModel.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/FormaDeContatoModel.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Model/TipoContatoModel.php';
-
-// Controladores:
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/EntidadeAutenticavel.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/UsuarioController.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/PratoController.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/PostagemController.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Controller/FormaDeContatoController.php';
+foreach ($arrayMVC as $diretorio => $listaArquivo)
+    foreach ($listaArquivo as $nomeArquivo)
+        require_once "$diretorioConfig/$diretorio/$nomeArquivo";

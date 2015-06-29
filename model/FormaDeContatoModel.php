@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe modelo para a entidade Forma de Contato
@@ -10,16 +10,12 @@ class FormaDeContatoModel implements Model
 {
     public function cadastrar(\Entidade $Entidade)
     {
-        $DAL = new DAL();
-        
-        $sql = "INSERT INTO forma_contato (tipo_contato_idtipo_contato,
-                                           usuario_idusuario,
-                                           valor)
-                                   VALUES ( " . $Entidade->getTipoContato()->getID() . ",
-                                            " . $Entidade->getUsuario()->getID() . ",
-                                           '" . $Entidade->getValor() . "')";
-        
-        $DAL->query($sql);
+        DAL::query("INSERT INTO forma_contato (tipo_contato_idtipo_contato,
+                                               usuario_idusuario,
+                                               valor)
+                                       VALUES ({$Entidade->getTipoContato()->getID()},
+                                               {$Entidade->getUsuario()->getID()},
+                                               '{$Entidade->getValor()}')");
     }
     
     public function atualizar(\Entidade $Entidade) {

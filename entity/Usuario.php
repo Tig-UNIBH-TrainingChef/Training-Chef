@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 define("TIPO_USUARIO_COZINHEIRO", "C");
 define("TIPO_USUARIO_RESTAURANTE", "R");
@@ -17,6 +17,16 @@ class Usuario implements Entidade
     private $senha;
     private $tipoUsuario;
     private $imagem;
+    
+    public function __construct($id = null, $nome = null, $email = null, $senha = null, $tipo = null, $imagem = null)
+    {
+        $id     ? $this->setID($id)            : null;
+        $nome   ? $this->setNome($nome)        : null;
+        $email  ? $this->setEmail($email)      : null;
+        $senha  ? $this->setSenha($senha)      : null;
+        $tipo   ? $this->setTipoUsuario($tipo) : null;
+        $imagem ? $this->setImagem($imagem)    : null;
+    }
     
     public function getID(){
         return $this->id;

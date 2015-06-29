@@ -1,15 +1,11 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
+
+$UsuarioController = new UsuarioController();
 
 if (isset($_POST['btn_logar']))
-{
-    $Usuario = new Usuario();
-    $Usuario->setEmail($_POST['email']);
-    $Usuario->setSenha($_POST['senha']);
-    
-    $UsuarioController = new UsuarioController();
-    if (!$UsuarioController->autenticar($Usuario))
+    if (!$UsuarioController->autenticar(new Usuario(null, null, $_POST['email'], $_POST['senha'])))
     {
         ?>
         <script>
@@ -17,7 +13,6 @@ if (isset($_POST['btn_logar']))
         </script>
         <?php
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +33,10 @@ if (isset($_POST['btn_logar']))
                             <form action="logar.php" method="post" onsubmit="return validarForm(this);">
                                 <p><input style="width: 100%" type="email" name="email" placeholder="Seu e-mail" /></p>
                                 <p><input style="width: 100%" type="password" name="senha" placeholder="Sua senha" /></p>
-                                <p><button class="btn btn-success" name="btn_logar">Entrar</button></p>
+                                <p>
+                                    <button class="btn btn-success" name="btn_logar">Entrar</button>
+                                    <a href="#">Esqueci minha senha</a>
+                                </p>
                             </form>
                         </div>
                     </div>

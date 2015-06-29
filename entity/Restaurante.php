@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 /**
  * Classe que representa a entidade Restaurante
@@ -15,6 +15,17 @@ class Restaurante implements Entidade
     private $endereco;
     private $cidade;
     private $codigoPostal;
+    
+    public function __construct($idRestaurante = null, Usuario $Usuario = null, $nome = null, $imagem = null, $endereco = null, $cidade = null, $codigoPostal = null)
+    {
+        $idRestaurante ? $this->setIDRestaurante($idRestaurante) : null;
+        $Usuario       ? $this->setUsuario($Usuario)             : null;
+        $nome          ? $this->setNome($nome)                   : null;
+        $imagem        ? $this->setImagem($imagem)               : null;
+        $endereco      ? $this->setEndereco($endereco)           : null;
+        $cidade        ? $this->setCidade($cidade)               : null;
+        $codigoPostal  ? $this->setCodigoPostal($codigoPostal)   : null;
+    }
     
     public function getIDRestaurante(){
         return $this->idRestaurante;

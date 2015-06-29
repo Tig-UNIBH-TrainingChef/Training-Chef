@@ -1,19 +1,16 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/Core/AutoLoad.php';
+require_once "{$_SERVER['DOCUMENT_ROOT']}/trainingchef/Core/AutoLoad.php";
 
 if (isset($_POST['btn_cadastrar']))
 {
-    $Usuario = new Usuario();
-    $Usuario->setNome($_POST['nome']);
-    $Usuario->setEmail($_POST['email']);
-    $Usuario->setSenha($_POST['senha']);
-    
-    
-    if ($_POST['tipo'] == "cozinheiro")
-        $Usuario->setTipoUsuario(TIPO_USUARIO_COZINHEIRO);
-    else if ($_POST['tipo'] == "restaurante")
-        $Usuario->setTipoUsuario(TIPO_USUARIO_RESTAURANTE);
+    $Usuario = new Usuario(
+        null,
+        $_POST['nome'],
+        $_POST['email'],
+        $_POST['senha'],
+        $_POST['tipo'] == "cozinheiro" ? TIPO_USUARIO_COZINHEIRO : TIPO_USUARIO_RESTAURANTE
+    );
     
     $UsuarioModel = new UsuarioModel();
     $UsuarioModel->cadastrar($Usuario);
